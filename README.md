@@ -7,3 +7,6 @@
 -öffnen der Webseite: Im Terminal: streamlit run main.py 
 
 mit #%% kann man auch einzelne zellen ausführen lassen 
+
+öffnen der csv # Laden der Daten aus der activity.csv in einem DataFrame
+df = pd.read_csv(r'C:\Programmierübungen_II\EKG-App-Entwicklung\data\activity.csv')
