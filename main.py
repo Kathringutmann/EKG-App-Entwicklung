@@ -1,29 +1,37 @@
+# Speichere diese Datei als main.py
+
 import streamlit as st
-from read_data import get_name, get_person_data, find_person_data_by_name
+from powercurve import calculate_power_curve
+import pandas as pd
+import matplotlib.pyplot as plt
 
-person_data = get_person_data()
-names = get_name(person_data)
-    
-#sessions State wird leer angelegt, solange 
-if 'current_user' not in st.session_state:
-    st.session_state.current_user = None
-    
-#Überschrift
-st.title('EKG Analyse')
+def main():
+    st.title("Leistungskurve Berechnung")
 
-from PIL import Image
+    # Pfadeinstellungen
+    csv_file_path = "activity.csv"
 
-col1, col2 = st.columns(2)
+    data = pd.read_csv(csv_file_path)
+    st.write("Datenvorschau:", data.head())
 
-with col1:
-   st.write("## Versuchsperson auswählen") #Unterüberschrift
-   current_user = st.selectbox(
-    'Versuchsperson',
-    options = names, key="sbVersuchspersonen")#Auswahlbox
-   image = Image.open(find_person_data_by_name(current_user)["picture_path"])
+    if 'PowerOriginal' in data.columns:
+        power_data = data['PowerOriginal']
 
-   st.write("currently selected user is: "+ current_user)
+        duration = st.number_input("Gib die Dauer (in Sekunden) ein", min_value=1, value=1)
 
-with col2:
-   st.header("Bild")
-   st.image(image, caption=st.session_state.current_user)
+        df_power_curve = calculate_power_curve(power_data, duration)
+
+        st.write("Leistungskurve:", df_power_curve.head())
+
+        fig, ax = plt.subplots()
+        ax.plot(df_power_curve['Time (s)'], df_power_curve['Power (W)'], label='Power Curve')
+        ax.set_xlabel('Time (s)')
+        ax.set_ylabel('Power (W)')
+        ax.set_title('Leistungskurve')
+        ax.legend()
+        st.pyplot(fig)
+    else:
+        st.error("Die CSV-Datei enthält keine 'PowerOriginal'-Spalte.")
+
+if __name__ == "__main__":
+    main()
