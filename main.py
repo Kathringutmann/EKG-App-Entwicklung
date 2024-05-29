@@ -1,37 +1,58 @@
-# Speichere diese Datei als main.py
-
 import streamlit as st
-from powercurve import calculate_power_curve
 import pandas as pd
 import matplotlib.pyplot as plt
 
+# CSV-Datei laden
+def load_csv(file_path):
+    df = pd.read_csv(file_path)
+    return df
+
+# Zeit und Leistung normalisieren
+def normalize_data(df, power_column='PowerOriginal'):
+    # Überprüfen, ob die Spalten vorhanden sind
+    if power_column not in df.columns:
+        raise ValueError("Die angegebene Spalte für Leistung ist nicht im DataFrame vorhanden.")
+    
+    # Zeit in Sekunden als Index verwenden
+    df['TimeInSeconds'] = df.index
+
+    # Nur relevante Spalten behalten
+    normalized_df = df[['TimeInSeconds', power_column]].dropna()
+    normalized_df.columns = ['TimeInSeconds', 'PowerInWatts']
+    
+    return normalized_df
+
+# Power-Curve Diagramm erstellen
+def plot_power_curve(df):
+    fig, ax = plt.subplots(figsize=(10, 6))
+    ax.plot(df['TimeInSeconds'], df['PowerInWatts'], marker='o', linestyle='-')
+    ax.set_title('Power Curve')
+    ax.set_xlabel('Time (seconds)')
+    ax.set_ylabel('Power (Watts)')
+    ax.grid(True)
+    return fig
+
 def main():
-    st.title("Leistungskurve Berechnung")
+    st.title('Power Curve Analysis')
 
-    # Pfadeinstellungen
-    csv_file_path = "activity.csv"
+    # Fester Pfad zur CSV-Datei
+    file_path = r'C:\Programmierübungen_II\EKG-App-Entwicklung\activity.csv'
+    
+    # Daten laden
+    df = load_csv(file_path)
 
-    data = pd.read_csv(csv_file_path)
-    st.write("Datenvorschau:", data.head())
+    # Daten normalisieren
+    normalized_df = normalize_data(df)
 
-    if 'PowerOriginal' in data.columns:
-        power_data = data['PowerOriginal']
+    # Normalisierte Daten anzeigen
+    st.subheader('Normalized Data')
+    st.write(normalized_df)
+    
+    # Power-Curve Diagramm anzeigen
+    st.subheader('Power Curve')
+    fig = plot_power_curve(normalized_df)
+    st.pyplot(fig)
 
-        duration = st.number_input("Gib die Dauer (in Sekunden) ein", min_value=1, value=1)
-
-        df_power_curve = calculate_power_curve(power_data, duration)
-
-        st.write("Leistungskurve:", df_power_curve.head())
-
-        fig, ax = plt.subplots()
-        ax.plot(df_power_curve['Time (s)'], df_power_curve['Power (W)'], label='Power Curve')
-        ax.set_xlabel('Time (s)')
-        ax.set_ylabel('Power (W)')
-        ax.set_title('Leistungskurve')
-        ax.legend()
-        st.pyplot(fig)
-    else:
-        st.error("Die CSV-Datei enthält keine 'PowerOriginal'-Spalte.")
-
-if __name__ == "__main__":
+if __name__ == '__main__':
     main()
+
