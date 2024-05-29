@@ -5,3 +5,6 @@
 -read_data.py : json datei->Funktion, die datei einließt-> dictionary mit der Person erstellt-> Funktion: nur den Firstname extrahiert-> Einer leeren Liste werden die Namen übergeben -> Funktion die die namen anzeigt
 
 -öffnen der Webseite: Im Terminal: streamlit run main.py 
+
+
+--- nächster schritt.... max heartrate vom person.py einladen in main.py und in streamlit anzeigen können
