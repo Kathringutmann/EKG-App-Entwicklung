@@ -27,8 +27,9 @@ def compute_powercurve (df):
     powerlist = []
     timelist =[]
     
-    for powerlevel in range(df["PowerOriginal"].min(),df["PowerOriginal"].max()):
-        print(powerlevel) 
+    for powerlevel in range(int(df["PowerOriginal"].min()),int(df["PowerOriginal"].max()),10):
+        powerlist.append(powerlevel)
+        timelist.append(find_duration_powerlevel(df, powerlevel))
     
     df =pd.DataFrame({"Leistung" : powerlist,
                       "Zeit" : timelist})
@@ -59,6 +60,16 @@ def find_duration_powerlevel(df, powerlevel):
 
     return max_duration
 
+def plot_data(power_curve_df):
+    fig, ax = plt.subplots(figsize=(10, 6))
+    ax.plot(power_curve_df['Zeit'], power_curve_df['Leistung'], marker='o', linestyle='-')
+    ax.set_title('Power Curve')
+    ax.set_xlabel('Time (seconds)')
+    ax.set_ylabel('Power (Watts)')
+    ax.grid(True)
+    return fig
+    
+    
 def main():
     # Pfad zur CSV-Datei angeben
     file_path = r"C:\Programmierübungen_II\EKG-App-Entwicklung\activity.csv"
@@ -67,9 +78,14 @@ def main():
     df = load_csv(file_path)
     
     # Daten plotten
-    plot_data(df)
-    print(find_duration_powerlevel (df, 250))
-    print(compute_powercurve (df))
+    #plot_data(df)
+    #print(find_duration_powerlevel (df, 250))
+    
+    power_curve_df = compute_powercurve(df)
+    print(power_curve_df)
+    fig = plot_data(power_curve_df)
+    fig.show()
+    
 
 if __name__ == '__main__':
     main()
