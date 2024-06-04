@@ -25,7 +25,7 @@ class EKGdata:
     def find_peaks(self):
         x = self.df["Messwerte in mV"]
         #thresold auf größeren Wert setzen, um nur Peaks zu finden, die höher als 360 mV sind
-        self.peaks = signal.find_peaks(x, height=None, threshold>=360, distance=None, prominence=None, width=None, wlen=None, rel_height=0.5, plateau_size=None)
+        self.peaks = signal.find_peaks(x, height=340)
         return self.peaks
 
     def make_plot(self):
