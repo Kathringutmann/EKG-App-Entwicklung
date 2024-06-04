@@ -1,12 +1,14 @@
 import streamlit as st
 from read_data import get_name, get_person_data, find_person_data_by_name
+import person
 
-person_data = get_person_data()
-names = get_name(person_data)
+#person_data = get_person_data()
+#names = get_name(person_data)
+
+person_data = person.Person.load_person_data()
+names = person.Person.get_person_list(person_data)
     
-#sessions State wird leer angelegt, solange 
-if 'current_user' not in st.session_state:
-    st.session_state.current_user = None
+current_person = None  
     
 #Überschrift
 st.title('EKG Analyse')
@@ -20,10 +22,18 @@ with col1:
    current_user = st.selectbox(
     'Versuchsperson',
     options = names, key="sbVersuchspersonen")#Auswahlbox
-   image = Image.open(find_person_data_by_name(current_user)["picture_path"])
+   
+   current_person = person.Person(find_person_data_by_name(current_user))
+
+     
+   
+   image = Image.open(current_person.picture_path)
+   
 
    st.write("currently selected user is: "+ current_user)
+   st.write(current_person.get_age())
+   st.write("currently selected user is: "+ current_person.calc_max_hr())
 
 with col2:
    st.header("Bild")
-   st.image(image, caption=st.session_state.current_user)
+   st.image(image, caption=current_user)
