@@ -21,7 +21,7 @@ with col1:
    st.write("## Versuchsperson auswählen") #Unterüberschrift
    current_user = st.selectbox(
     'Versuchsperson',
-    options = names, key="sbVersuchspersonen")#Auswahlbox
+    options = names, key="sbVersuchspersonen") #Auswahlbox
    
    current_person = person.Person(find_person_data_by_name(current_user))
 
