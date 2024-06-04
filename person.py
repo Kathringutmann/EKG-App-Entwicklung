@@ -40,7 +40,20 @@ class Person:
                 return eintrag
         else:
             return {}
-        
+    
+    def get_test_ids(self):
+        person_id = self.id
+        person_data = Person.load_person_data()
+    
+        test_ids = []
+        for person in person_data:
+            if person['id'] == person_id:
+                for test in person['ekg_tests']:
+                    test_ids.append(test['id'])
+    
+        return test_ids
+
+    
     def __init__(self, person_dict) -> None:
         self.date_of_birth = person_dict["date_of_birth"]
         self.firstname = person_dict["firstname"]

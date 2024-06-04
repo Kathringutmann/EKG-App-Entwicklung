@@ -31,8 +31,8 @@ with col1:
    
 
    st.write("currently selected user is: "+ current_user)
-   st.write(current_person.get_age())
-   st.write("currently selected user is: "+ current_person.calc_max_hr())
+   st.write("age of current user: " + str(current_person.get_age()))
+   st.write ("max heartrate calculated by age is: "+ str(current_person.calc_max_hr()))
 
 with col2:
    st.header("Bild")

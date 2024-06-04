@@ -7,4 +7,3 @@
 -öffnen der Webseite: Im Terminal: streamlit run main.py 
 
 
---- nächster schritt.... max heartrate vom person.py einladen in main.py und in streamlit anzeigen können

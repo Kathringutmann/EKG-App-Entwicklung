@@ -10,6 +10,23 @@ class EKGdata:
 
 ## Konstruktor der Klasse soll die Daten einlesen
 
+    @staticmethod
+    def load_by_id(person_data,id):
+        """ Eine Funktion"""
+        
+        for person in person_data:
+            #print(person)
+            for test in person["ekg_tests"]:
+                #print(test)
+                if test["id"] == id:
+                    #print(id)
+                    return test
+
+        return {}
+        
+
+
+
     def __init__(self, ekg_dict):
         #pass
         self.id = ekg_dict["id"]
@@ -26,10 +43,15 @@ class EKGdata:
 
 
 if __name__ == "__main__":
-    print("This is a module with some functions to read the EKG data")
     file = open("data/person_db.json")
     person_data = json.load(file)
-    ekg_dict = person_data[0]["ekg_tests"][0]
-    print(ekg_dict)
-    ekg = EKGdata(ekg_dict)
-    print(ekg.df.head())
+    test_dict = EKGdata.load_by_id(person_data,2)
+    ekg = EKGdata(test_dict)
+    print(ekg.id)
+    
+    #print("This is a module with some functions to read the EKG data")
+
+    #ekg_dict = person_data[0]["ekg_tests"][0]
+    #print(ekg_dict)
+    #ekg = EKGdata(ekg_dict)
+    #print(ekg.df.head())
