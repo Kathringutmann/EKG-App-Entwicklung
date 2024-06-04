@@ -77,3 +77,10 @@ if __name__ == "__main__":
     
     person1 = Person(person_dict)
     print(person1.firstname)
+    
+    #person1 = Person(person_dict)
+
+# Call the function
+    test_ids = Person.get_test_ids(person1)
+    print(test_ids)
+    

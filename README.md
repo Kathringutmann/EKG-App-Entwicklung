@@ -6,4 +6,4 @@
 
 - öffnen der Webseite: Im Terminal: streamlit run main.py 
 
-
+-pip freeze > requirements.txt
