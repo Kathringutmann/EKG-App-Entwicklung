@@ -4,6 +4,16 @@ import person
 import ekgdata
 from PIL import Image
 
+# Benutzerdefinierte Funktion zur Synchronisierung des Slider- und Texteingabefeld-Werts
+def sync_range_size():
+    global range_size
+    global range_size_input
+    try:
+        range_size = int(range_size_input)
+    except ValueError:
+        st.warning("Bitte geben Sie eine ganze Zahl ein.")
+        range_size_input = str(range_size)
+
 person_data = person.Person.load_person_data()
 names = person.Person.get_person_list(person_data)
 current_person = None
@@ -37,7 +47,17 @@ with col2:
     total_size_ms = 600000
 
     # Slider zur Einstellung der Größe des ausgewählten Bereichs in ms
-    range_size = st.slider("Ausschnittsgröße (ms)", 1000, total_size_ms, 5000)
+    range_size = st.slider("Ausschnittsgröße (ms)", 0, total_size_ms, 5000)
+
+    # Texteingabefeld für präzise Eingabe der Ausschnittsgröße
+    range_size_input = st.text_input("Ausschnittsgröße eingeben:", str(range_size))
+
+    # Synchronisierung auslösen, wenn sich der Wert im Texteingabefeld ändert
+    sync_range_size()
+
+    # Synchronisierung auslösen, wenn sich der Wert des Sliders ändert
+    if range_size != int(range_size_input):
+        range_size_input = str(range_size)
 
     # Slider zur Verschiebung des ausgewählten Bereichs entlang des EKG-Grafiks in ms
     range_start = st.slider("Verschiebung (ms)", 0, total_size_ms - range_size, 0)
