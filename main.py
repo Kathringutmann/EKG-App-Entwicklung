@@ -28,9 +28,9 @@ with col1:
     current_person = person.Person(find_person_data_by_name(current_user))
     test_ids = person.Person.get_test_ids(current_person)
     image = Image.open(current_person.picture_path)
-    st.write("currently selected user is: " + current_user)
-    st.write("age of current user: " + str(current_person.get_age()))
-    st.write("max heartrate calculated by age is: " + str(current_person.calc_max_hr()))
+    st.write("Derzeit ausgewählter Nutzer ist: " + current_user)
+    st.write("Alter des aktuellen Nutzers: " + str(current_person.get_age()))
+    st.write("Max. Herzrate (basierend auf aktuellem Alter): " + str(current_person.calc_max_hr()))
 
 with col2:
     st.header("Bild")
