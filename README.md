@@ -63,7 +63,7 @@ streamlit run main.py
 Hier ist ein Beispiel - Screenshot der Anwendung in Aktion:
 Beispiel Person: Huber, Julian
 ![Screenshot1](screenshot_1.png)
-![Screenshot4](screenshot_12.png)
+![Screenshot12](screenshot_12.jpeg)
 ![Screenshot2](screenshot_2.png)
 ![Screenshot3](screenshot_3.png)
 
