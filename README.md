@@ -1,3 +1,3 @@
-genaues README im main-Branch
+genaues README zur Anwendung im Branch Nr. 5 Objektorientierung
 
 
