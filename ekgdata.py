@@ -2,6 +2,9 @@ import json
 import pandas as pd
 import plotly.express as px
 import scipy.signal as signal
+import streamlit as st
+import plotly.graph_objects as go
+
 
 # %% Objekt-Welt
 
@@ -26,16 +29,21 @@ class EKGdata:
                     return test
 
         return {}
-        
-
 
 
     def __init__(self, ekg_dict):
-        #pass
+        #übergibt die Daten aus dem Dictionary in die Klasse
         self.id = ekg_dict["id"]
         self.date = ekg_dict["date"]
         self.data = ekg_dict["result_link"]
         self.df = pd.read_csv(self.data, sep='\t', header=None, names=['Messwerte in mV','Zeit in ms',])
+        self.peaks = self.find_peaks()
+        self.peaks_plot = self.get_peaks_df()  
+        self.hr = self.estimate_hr_peaks()
+        self.fig = None
+        self.fig_hr = None
+        self.heartrate_time = pd.DataFrame({"Time in s": self.peaks_plot["Zeit in ms"]/1000, "Heartrate": self.hr})
+        
 
     def find_peaks(self):
         x = self.df["Messwerte in mV"]
@@ -51,6 +59,7 @@ class EKGdata:
 
         # Erstellte einen Line Plot, mit der Zeit aus der x-Achse
         self.fig = px.line(self.df, x="Zeit in ms", y="Messwerte in mV")
+        self.fig_hr = px.line(self.heartrate_time, x="Time in s", y="Heartrate", title="Herzfrequenz über die Zeit")
 
         # show the peaks in the plot that are above the threshold
         self.fig.add_scatter(x=self.df["Zeit in ms"].iloc[self.peaks[0]], y=self.df["Messwerte in mV"].iloc[self.peaks[0]], mode='markers', marker=dict(color='blue', size=8))
@@ -64,9 +73,14 @@ class EKGdata:
         self.hr = 1 / rr_intervall
         return self.hr
     
+    # Erstelle einen neuen Plot mit der Herzfrequenzvariabilität
     def make_plot_hr(self):
         self.fig_hr = px.line(x=self.get_peaks_df()["Zeit in ms"], y=self.hr)
         return self.fig_hr
+    
+    # Binde die Plots in Streamlit ein
+        st.plotly_chart(fig)
+        st.plotly_chart(fig_hr)
 
 
 if __name__ == "__main__":
