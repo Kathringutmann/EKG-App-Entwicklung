@@ -47,7 +47,7 @@ class EKGdata:
 
     def find_peaks(self):
         x = self.df["Messwerte in mV"]
-        #thresold auf größeren Wert setzen, um nur Peaks zu finden, die höher als 360 mV sind
+        #thresold auf größeren Wert setzen, um nur Peaks zu finden, die höher als 340 mV sind
         self.peaks = signal.find_peaks(x, height=340)
         return self.peaks
     
@@ -73,15 +73,10 @@ class EKGdata:
         self.hr = 1 / rr_intervall
         return self.hr
     
-    # Erstelle einen neuen Plot mit der Herzfrequenzvariabilität
-    def make_plot_hr(self):
-        self.fig_hr = px.line(x=self.get_peaks_df()["Zeit in ms"], y=self.hr)
-        return self.fig_hr
-    
-    # Binde die Plots in Streamlit ein
-        st.plotly_chart(fig)
-        st.plotly_chart(fig_hr)
-
+    # Binde den Plot in Streamlit ein
+    def show_plot(self):
+        st.plotly_chart(self.fig)
+        st.plotly_chart(self.fig_hr)
 
 if __name__ == "__main__":
     file = open("data/person_db.json")
@@ -89,22 +84,26 @@ if __name__ == "__main__":
     test_dict = EKGdata.load_by_id(person_data,2)
     ekg = EKGdata(test_dict)
     print(ekg.id)
-    
-    #print("This is a module with some functions to read the EKG data")
+    print(ekg.date)
+    print(ekg.data)
+    print(ekg.peaks)
+    print(ekg.peaks_plot)
+    print(ekg.hr)
+    print(ekg.heartrate_time)
 
-    #ekg_dict = person_data[0]["ekg_tests"][0]
-    #print(ekg_dict)
-    #ekg = EKGdata(ekg_dict)
-    #print(ekg.df.head())
+    ekg_dict = person_data[0]["ekg_tests"][0]
+    print(ekg_dict)
+    ekg = EKGdata(ekg_dict)
+    print(ekg.df.head())
     
-    #Zeige Graf
+    #Zeige Graf der Peaks
     ekg.find_peaks()
     ekg.make_plot()
     ekg.fig.show()
 
-    #Zeige Plot der Peaks
+    #Zeige Plot zwischen Herzfrequenz und Zeit
     ekg.get_peaks_df()
     ekg.estimate_hr_peaks()
-    ekg.make_plot_hr()
+    ekg.make_plot()
     ekg.fig_hr.show()
 
