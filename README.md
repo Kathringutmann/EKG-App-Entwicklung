@@ -43,9 +43,16 @@ pip install -r requirements.txt
 ```ruby
 streamlit run main.py
 ```
+### benötigte Bibliotheken
+- pandas
+- streamlit
+- PIL
+- scipy
+- plotly
+- json
+- weitere Bibliotheken Kathrin
 
 ### Dateien
-
 - main.py: Hauptdatei der Anwendung.
 - read_data.py: Skript zum Einlesen der Personendaten.
 - person.py: Modul zur Verwaltung der Personendaten.
