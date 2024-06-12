@@ -1,7 +1,7 @@
 import streamlit as st
 from read_data import get_name, get_person_data, find_person_data_by_name
 import person
-import ekgdata
+from ekgdata import EKGdata
 from PIL import Image
 
 # Benutzerdefinierte Funktion zur Synchronisierung des Slider- und Texteingabefeld-Werts
@@ -14,13 +14,15 @@ def sync_range_size():
         st.warning("Bitte geben Sie eine ganze Zahl ein.")
         range_size_input = str(range_size)
 
-person_data = person.Person.load_person_data()
-names = person.Person.get_person_list(person_data)
-current_person = None
-
+person_data = person.Person.load_person_data() #Personendaten laden
+names = person.Person.get_person_list(person_data) #Namen der Personen in Liste speichern
+    
+current_person = None  #Variable für aktuelle Person
+    
+#Überschrift
 st.title('EKG Analyse')
 
-col1, col2 = st.columns(2)
+col1, col2 = st.columns(2) #Spalten erstellen
 
 with col1:
     st.write("## Versuchsperson auswählen")
@@ -32,14 +34,28 @@ with col1:
     st.write("Alter des aktuellen Nutzers: " + str(current_person.get_age()))
     st.write("Max. Herzrate (basierend auf aktuellem Alter): " + str(current_person.calc_max_hr()))
 
+    if current_person:
+      test_dict = EKGdata.load_by_id(person_data, current_person.id)
+      ekg = EKGdata(test_dict)
+      ekg.find_peaks()
+      ekg.plot_time_series()
+      st.plotly_chart(ekg.fig)
+      hr = ekg.estimate_hr_peaks()
+
+      #st.write(f"Estimated Heart Rate: {hr.mean():.2f} bpm")
+      
+      ekg.make_plot_hr()
+      st.plotly_chart(ekg.fig_hr)
+      
+
 with col2:
     st.header("Bild")
     st.image(image, caption=current_user)
     selected_test_id = st.selectbox('Wählen Sie eine Test-ID:', test_ids)
     st.write(f'Sie haben die Test-ID {selected_test_id} ausgewählt.')
 
-    test_dict = ekgdata.EKGdata.load_by_id(person_data, selected_test_id)
-    ekg = ekgdata.EKGdata(test_dict)
+    test_dict = EKGdata.load_by_id(person_data, selected_test_id)
+    ekg = EKGdata(test_dict)
     ekg.find_peaks()
     ekg.make_plot()
 
