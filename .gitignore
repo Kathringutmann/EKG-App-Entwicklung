@@ -2,3 +2,5 @@
 *.pyc
 __pycache__/
 __pycache__/person.cpython-312.pyc
+__pycache__/ekgdata.cpython-311.pyc
+__pycache__/read_data.cpython-311.pyc
