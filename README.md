@@ -69,8 +69,44 @@ Falls Sie Probleme beim Installieren oder Verwenden der Anwendung haben oder Ver
 **_Viel Spaß beim Experimentieren!_** 🦾 💻 📈
 
 
+## WEITERE ERWEITERUNGSMÖGLICHKEITEN
+1. App Lock: Zugriff nur für Ärzte
+2. Herzratenvariabilität in großes schon bereits geplottetes EKG einfügen
+3. Herzratenabweichungen für mögliche Erkrankungserkennungen: siehe "nächster Schritt" 
 
 
 
+## Nächster Schritt: Durchschnitts Herzschlag mit allen anderen Herzschlägen vergleichen und die 5 abweichendsten anzeigen:
+-> nächste schritte in ekg.py bei zeile 163 bei funktion herzschlag_vergleich eintragen:
 
+1. mit dtw alle auf eine länge wieder bringen, da man nur so vergleichen kann Bsp.:
+        Verwende den ersten Herzschlag als Referenz
+        referenz = herzschlaege[0]
+        
+        # Warpe alle Herzschläge zur Referenz und speichere die gewarpten Herzschläge
+        aligned_herzschlaege = []
+        
+        for herzschlag in herzschlaege:
+            alignment = dtw(herzschlag, referenz, keep_internals=True, dist_method=dist_metric)
+            aligned_herzschlag = [herzschlag[idx] for idx in alignment.index1]
+            aligned_herzschlaege.append(aligned_herzschlag)
+        
+2. und dann resampel Bsp.:
+        # Resample the aligned heartbeats to a common length
+        resampled_herzschlaege = []
+        for herzschlag in aligned_herzschlaege:
+            resampled_herzschlag = np.interp(np.linspace(0, len(herzschlag) - 1, resample_length), np.arange(len(herzschlag)), herzschlag)
+            resampled_herzschlaege.append(resampled_herzschlag)
+        
+        # Berechne den Durchschnitt über alle resampled Herzschläge hinweg
+        avg_herzschlag = np.mean(resampled_herzschlaege, axis=0)
 
+3. dann in der formel mean square error MSE in arrays
+        (2 arrays mit gleicher länge!)
+        Formel:(array 1 - array2)**2 = MSE
+
+4. durch Formel hat man einen Array? ------ NACHFRAGEN!!!!
+        -> aus diesen einzelnen Datenpunkten-differenzen, können dann die 5 größten Abweichungen gefiltert werden
+        ? : eventuell könnten mehr als 5 Abweichungen gefiltert werden müssen, damit man die 5 Herzschläge mit den größten Abweichungen bekommt
+
+        -> diese jeweils einzeln mit plotly ausplotten
