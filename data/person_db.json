@@ -7,10 +7,12 @@
 	"ekg_tests": [{
 		"id": 1,
 		"date": "10.2.2023",
-		"result_link": "data/ekg_data/01_Ruhe.txt"}, {
+		"result_link": "data/ekg_data/01_Ruhe.txt",
+		"data_path" : "data/activity.csv" }, {
 		"id": 2,
 		"date": "11.3.2023",
-		"result_link": "data/ekg_data/04_Belastung.txt"
+		"result_link": "data/ekg_data/04_Belastung.txt",
+		"data_path" : "data/activity.csv" 
 	}]
 }, {
 	"id": 2,
@@ -21,7 +23,8 @@
 	"ekg_tests": [{
 		"id": 3,
 		"date": "10.2.2023",
-		"result_link": "data/ekg_data/02_Ruhe.txt"
+		"result_link": "data/ekg_data/02_Ruhe.txt",
+		"data_path" : "data/activity.csv" 
 	}]
 }, {
 	"id": 3,
@@ -32,6 +35,7 @@
 	"ekg_tests": [{
 		"id": 4,
 		"date": "11.3.2023",
-		"result_link": "data/ekg_data/03_Ruhe.txt"
+		"result_link": "data/ekg_data/03_Ruhe.txt",
+		"data_path" : "data/activity.csv" 
 	}]
 }]
