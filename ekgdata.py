@@ -50,6 +50,9 @@ class EKGdata:
 
         return self.fig 
 
+    def update_axis(self,range_start, range_end):
+        self.fig.update_xaxes(range=[range_start, range_end])
+
 
     #Methode für die Herzfrequenz erstellen
     # errechne die Heart Rate aus dem neuen DataFrame mit den Peaks

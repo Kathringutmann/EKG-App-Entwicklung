@@ -57,7 +57,7 @@ with col2:
     test_dict = EKGdata.load_by_id(person_data, selected_test_id)
     ekg = EKGdata(test_dict)
     ekg.find_peaks()
-    ekg.make_plot()
+    ekg.plot_time_series()
 
     # Gesamtgröße des EKG-Datensatzes in ms (angenommen 600000 ms)
     total_size_ms = 600000
@@ -86,6 +86,6 @@ with col2:
 
     # Update plot with selected range
     ekg.update_axis(range_start, range_end)
-
+    
     # Plot the updated figure
     st.plotly_chart(ekg.fig)
