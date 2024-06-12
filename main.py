@@ -2,6 +2,7 @@ import streamlit as st
 from read_data import get_name, get_person_data, find_person_data_by_name
 import person
 from ekgdata import EKGdata
+import ekgdata
 from PIL import Image
 from power_data import load_data_for_plot, create_interactive_plot
 
@@ -19,41 +20,33 @@ person_data = person.Person.load_person_data() #Personendaten laden
 names = person.Person.get_person_list(person_data) #Namen der Personen in Liste speichern
     
 current_person = None  #Variable für aktuelle Person
-    
+
+#Sidebar erstellen
+st.sidebar.title('Daten zur Person')
+
+current_user = st.sidebar.selectbox('**Nutzer/in auswählen:**', options=names, key="sbVersuchspersonen")
+current_person = person.Person(find_person_data_by_name(current_user))
+test_ids = person.Person.get_test_ids(current_person)
+image = Image.open(current_person.picture_path)
+st.sidebar.write("Alter: " + str(current_person.get_age()) + " Jahre")
+st.sidebar.image(image, caption=current_user)
+selected_test_id = st.sidebar.selectbox('Test-ID auswählen:', test_ids)
+st.sidebar.write("Maximale Herzrate: " + str(current_person.calc_max_hr()))
+st.sidebar.write("Testdatum:",testdatum := EKGdata.load_by_id(person_data, selected_test_id)["date"])
+
 #Überschrift
 st.title('EKG Analyse')
 
-col1, col2 = st.columns(2) #Spalten erstellen
+tab1, tab2, tab3 = st.tabs(["EKG Data", "Power Data", "Heart-Rate Analysis"]) #Tabs erstellen
 
-with col1:
-    st.write("## Versuchsperson auswählen")
-    current_user = st.selectbox('Versuchsperson', options=names, key="sbVersuchspersonen")
-    current_person = person.Person(find_person_data_by_name(current_user))
-    test_ids = person.Person.get_test_ids(current_person)
-    image = Image.open(current_person.picture_path)
-    st.write("Derzeit ausgewählter Nutzer ist: " + current_user)
-    st.write("Alter des aktuellen Nutzers: " + str(current_person.get_age()))
-    st.write("Max. Herzrate (basierend auf aktuellem Alter): " + str(current_person.calc_max_hr()))
-
+with tab1:
     if current_person:
       test_dict = EKGdata.load_by_id(person_data, current_person.id)
       ekg = EKGdata(test_dict)
       ekg.find_peaks()
-      ekg.plot_time_series()
-      st.plotly_chart(ekg.fig)
+      ekg.plot_time_series() #Herzfrequnzanalyse
+      st.plotly_chart(ekg.fig) #Peaks finden
       hr = ekg.estimate_hr_peaks()
-
-      #st.write(f"Estimated Heart Rate: {hr.mean():.2f} bpm")
-      
-      ekg.make_plot_hr()
-      st.plotly_chart(ekg.fig_hr)
-      
-
-with col2:
-    st.header("Bild")
-    st.image(image, caption=current_user)
-    selected_test_id = st.selectbox('Wählen Sie eine Test-ID:', test_ids)
-    st.write(f'Sie haben die Test-ID {selected_test_id} ausgewählt.')
 
     test_dict = EKGdata.load_by_id(person_data, selected_test_id)
     ekg = EKGdata(test_dict)
@@ -91,9 +84,23 @@ with col2:
     # Plot the updated figure
     st.plotly_chart(ekg.fig)
 
+    #st.write(f"Estimated Heart Rate: {hr.mean():.2f} bpm")
+    hr = ekg.estimate_hr_peaks()  
+    ekg.make_plot_hr()
+    st.plotly_chart(ekg.fig_hr)
+      
 
-# Laden der Daten und Erstellen des Plots bei Auswahl einer Versuchsperson
-if current_user is not None:
-    df = load_data_for_plot(current_user)
-    fig = create_interactive_plot(df)
-    st.plotly_chart(fig)
+with tab2:
+    
+    
+    # Laden der Daten und Erstellen des Plots bei Auswahl einer Versuchsperson
+    if current_user is not None:
+        df = load_data_for_plot(current_user)
+        fig = create_interactive_plot(df)
+        st.plotly_chart(fig)
+
+
+with tab3: #Tab 3 für Erweiterung der Herzfrequenzanalyse
+
+    st.write("## Herzfrequenzanalyse")
+    st.write("Erweiterung hinzufügen!!!")
