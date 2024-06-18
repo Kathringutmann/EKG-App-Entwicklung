@@ -53,7 +53,7 @@ def ekg_analysis_page():
     st.sidebar.write("Alter: " + str(current_person.get_age()) + " Jahre")
     st.sidebar.image(image, caption=current_user)
     selected_test_id = st.sidebar.selectbox('Test-ID auswählen:', test_ids)
-    st.sidebar.write("Maximale Herzrate: " + str(current_person.calc_max_hr()))
+    st.sidebar.write("Maximale Herzrate: " + str(current_person.calc_max_hr())+" in BPM")
     st.sidebar.write("Testdatum:", EKGdata.load_by_id(person_data, selected_test_id)["date"])
 
     # Überschrift
