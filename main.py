@@ -22,9 +22,15 @@ st.markdown(
 def welcome_page():
     st.markdown("<h1 style='text-align: center;'>Willkommen zu CardioGraph!</h1>", unsafe_allow_html=True)
     
-    # Füge ein Bild ein
-    image = Image.open("path/to/your/image.png")  # Passe den Pfad zu deinem Bild an
-    st.image(image, caption='Bildunterschrift', use_column_width=True)  # Zeige das Bild an, passe die Optionen nach Bedarf an
+    # Spalten erstellen (verhältnismäßige Breite: 1/4 - 1/2 - 1/4)
+    left_column, middle_column, right_column = st.columns([1, 2, 1])
+
+# Fülle die mittlere Spalte mit dem Bild
+    with middle_column:
+        image = st.image("CardioGraph-Logo.png", use_column_width=True)
+
+    
+    
     
     # Zentriere den Button horizontal
     col1, col2, col3 = st.columns([2, 1, 2])
