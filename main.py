@@ -6,26 +6,27 @@ import ekgdata
 from PIL import Image
 from power_data import load_data_for_plot, create_interactive_plot
 
+# Definiere die Hintergrundfarbe für die gesamte App
+st.markdown(
+    """
+    <style>
+    .stApp {
+        background-color: #ADD8E6; /* Light blue background */
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+
 # Funktion für die Willkommensseite
 def welcome_page():
-    st.markdown(
-        """
-        <style>
-        .stApp {
-            background-color: #ADD8E6; /* Light blue background */
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
-        </style>
-        """,
-        unsafe_allow_html=True
-    )
-    st.markdown("<h1 style='text-align: center;'>Willkommen zur EKG Analyse</h1>", unsafe_allow_html=True)
-    if st.button('Klicke hier, um zu starten'):
-        st.session_state.page = 'analysis'
+    st.markdown("<h1 style='text-align: center;'>Willkommen zu CardioGraph!</h1>", unsafe_allow_html=True)
+    
+    # Zentriert den Button horizontal
+    col1, col2, col3 = st.columns([2, 1, 2])
+    with col2:
+        if st.button('Jetzt starten'):
+            st.session_state.page = 'analysis'
 
 # Funktion für die EKG-Analyse-Seite
 def ekg_analysis_page():
