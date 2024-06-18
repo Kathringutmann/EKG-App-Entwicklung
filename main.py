@@ -11,7 +11,7 @@ st.markdown(
     """
     <style>
     .stApp {
-        background-color: #ADD8E6; /* Light blue background */
+        background-color: #C6EFFD; /* Light blue background */
     }
     </style>
     """,
@@ -22,7 +22,11 @@ st.markdown(
 def welcome_page():
     st.markdown("<h1 style='text-align: center;'>Willkommen zu CardioGraph!</h1>", unsafe_allow_html=True)
     
-    # Zentriert den Button horizontal
+    # Füge ein Bild ein
+    image = Image.open("path/to/your/image.png")  # Passe den Pfad zu deinem Bild an
+    st.image(image, caption='Bildunterschrift', use_column_width=True)  # Zeige das Bild an, passe die Optionen nach Bedarf an
+    
+    # Zentriere den Button horizontal
     col1, col2, col3 = st.columns([2, 1, 2])
     with col2:
         if st.button('Jetzt starten'):
@@ -47,7 +51,7 @@ def ekg_analysis_page():
     st.sidebar.write("Testdatum:", EKGdata.load_by_id(person_data, selected_test_id)["date"])
 
     # Überschrift
-    st.title('EKG Analyse')
+    st.title('CardioGraph')
 
     tab1, tab2, tab3 = st.tabs(["EKG Data", "Power Data", "Heart-Rate Analysis"])  # Tabs erstellen
 
