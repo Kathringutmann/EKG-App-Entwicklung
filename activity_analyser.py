@@ -1,7 +1,9 @@
 import pandas as pd
 import plotly.graph_objects as go
 
+
 def plot_performance_and_heart_rate(file_path):
+    """Erstellt ein interaktives Plotly-Diagramm, das die Leistung und die Herzfrequenz über die Zeit anzeigt und gibt es zurück."""
     # Laden der Daten aus der angegebenen CSV-Datei in einem DataFrame
     df = pd.read_csv(file_path)
 
@@ -66,4 +68,4 @@ def plot_performance_and_heart_rate(file_path):
         )
     )
 
-    return fig
+    return fig # Rückgabe der erstellten Plotly-Figur

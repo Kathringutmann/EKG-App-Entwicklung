@@ -6,6 +6,7 @@ import ekgdata
 from PIL import Image
 from power_data import load_data_for_plot, create_interactive_plot
 
+
 # Definiere die Hintergrundfarbe für die gesamte App
 st.markdown(
     """
@@ -20,55 +21,55 @@ st.markdown(
 
 # Funktion für die Willkommensseite
 def welcome_page():
+    """ Erstellt die Willkommensseite der App mit einem Bild und einem Start-Button."""
     st.markdown("<h1 style='text-align: center;'>Willkommen zu CardioGraph!</h1>", unsafe_allow_html=True)
     
     # Spalten erstellen (verhältnismäßige Breite: 1/4 - 1/2 - 1/4)
     left_column, middle_column, right_column = st.columns([1, 2, 1])
 
-# Fülle die mittlere Spalte mit dem Bild
+    # Fülle die mittlere Spalte mit dem Bild
     with middle_column:
         image = st.image("CardioGraph-Logo.png", use_column_width=True)
 
-    
-    
-    
     # Zentriere den Button horizontal
     col1, col2, col3 = st.columns([2, 1, 2])
-    with col2:
+    
+    with col2: # Fülle die mittlere Spalte mit dem Button
         if st.button('Jetzt starten'):
             st.session_state.page = 'analysis'
 
-# Funktion für die EKG-Analyse-Seite
+
 def ekg_analysis_page():
+    """ Erstellt die EKG-Analyse-Seite der App mit Tabs für die verschiedenen Analysen."""
     person_data = person.Person.load_person_data()  # Personendaten laden
     names = person.Person.get_person_list(person_data)  # Namen der Personen in Liste speichern
 
     # Sidebar erstellen
     st.sidebar.title('Daten zur Person')
 
-    current_user = st.sidebar.selectbox('**Nutzer/in auswählen:**', options=names, key="sbVersuchspersonen")
-    current_person = person.Person(find_person_data_by_name(current_user))
-    test_ids = person.Person.get_test_ids(current_person)
-    image = Image.open(current_person.picture_path)
-    st.sidebar.write("Alter: " + str(current_person.get_age()) + " Jahre")
-    st.sidebar.image(image, caption=current_user)
-    selected_test_id = st.sidebar.selectbox('Test-ID auswählen:', test_ids)
-    st.sidebar.write("Maximale Herzrate: " + str(current_person.calc_max_hr())+" in BPM")
-    st.sidebar.write("Testdatum:", EKGdata.load_by_id(person_data, selected_test_id)["date"])
+    current_user = st.sidebar.selectbox('**Nutzer/in auswählen:**', options=names, key="sbVersuchspersonen") #Sidebar für die Auswahl der Versuchspersonen
+    current_person = person.Person(find_person_data_by_name(current_user)) #Personendaten für die ausgewählte Person laden
+    test_ids = person.Person.get_test_ids(current_person) #Test-IDs für die ausgewählte Person speichern
+    image = Image.open(current_person.picture_path) #Bild der ausgewählten Person laden
+    st.sidebar.write("Alter: " + str(current_person.get_age()) + " Jahre") #Alter der ausgewählten Person anzeigen
+    st.sidebar.image(image, caption=current_user) #Bild der ausgewählten Person im Sidebar anzeigen
+    selected_test_id = st.sidebar.selectbox('Test-ID auswählen:', test_ids) #Test-ID für die ausgewählte Person im Sidebar anzeigen
+    st.sidebar.write("Maximale Herzrate: " + str(current_person.calc_max_hr())+" in BPM") #Maximale Herzrate der ausgewählten Person anzeigen
+    st.sidebar.write("Testdatum:", EKGdata.load_by_id(person_data, selected_test_id)["date"]) #Testdatum der ausgewählten Person anzeigen
 
     # Überschrift
     st.title('CardioGraph')
 
-    tab1, tab2, tab3 = st.tabs(["EKG Data", "Power Data", "Heart-Rate Analysis"])  # Tabs erstellen
+    tab1, tab2, tab3 = st.tabs(["EKG-Daten", "Leistungsdaten", "Herzfrequenzanalyse"])  # Tabs erstellen
 
-    with tab1:
-        if current_person:
-            test_dict = EKGdata.load_by_id(person_data, current_person.id)
-            ekg = EKGdata(test_dict)
-            ekg.find_peaks()
+    with tab1: # Tab 1 für EKG-Daten
+        if current_person: # Wenn eine Person ausgewählt wurde
+            test_dict = EKGdata.load_by_id(person_data, current_person.id) # EKG-Testdaten für die ausgewählte Person laden
+            ekg = EKGdata(test_dict) # EKG-Objekt erstellen
+            ekg.find_peaks() # Peaks in den EKG-Daten finden
             ekg.plot_time_series()  # Herzfrequnzanalyse
             st.plotly_chart(ekg.fig)  # Peaks finden
-            hr = ekg.estimate_hr_peaks()
+            hr = ekg.estimate_hr_peaks() # Herzfrequenz aus den Peaks schätzen
 
         test_dict = EKGdata.load_by_id(person_data, selected_test_id)
         ekg = EKGdata(test_dict)
@@ -84,9 +85,9 @@ def ekg_analysis_page():
         # Texteingabefeld für präzise Eingabe der Ausschnittsgröße
         range_size_input = st.text_input("Ausschnittsgröße eingeben:", str(range_size), key="range_size_input")
 
-        try:
+        try: # Versuche, die Eingabe in eine ganze Zahl umzuwandeln
             range_size = int(range_size_input)
-        except ValueError:
+        except ValueError: # Wenn die Eingabe keine ganze Zahl ist, gib eine Warnung aus und setze die Größe auf 5000 ms
             st.warning("Bitte geben Sie eine ganze Zahl ein.")
             range_size = 5000
 
@@ -110,7 +111,7 @@ def ekg_analysis_page():
         ekg.make_plot_hr()
         st.plotly_chart(ekg.fig_hr)
 
-    with tab2:
+    with tab2: # Tab 2 für Leistungsdaten
         # Laden der Daten und Erstellen des Plots bei Auswahl einer Versuchsperson
         if current_user is not None:
             df = load_data_for_plot(current_user)
@@ -120,6 +121,7 @@ def ekg_analysis_page():
     with tab3:  # Tab 3 für Erweiterung der Herzfrequenzanalyse
         st.write("## Herzfrequenzanalyse")
         st.write("Erweiterung hinzufügen!!!")
+
 
 # Initialisiere den Session State für die Seitenwahl
 if 'page' not in st.session_state:

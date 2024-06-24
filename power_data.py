@@ -1,21 +1,24 @@
 
 import plotly.graph_objects as go
 import pandas as pd
-
 from read_data import find_person_data_by_name
+
+
 # Laden der Daten für den Plot
 def load_data_for_plot(person_name):
+    """Lädt die Leistungsdaten für die angegebene Person und gibt sie zurück."""
     person_data = find_person_data_by_name(person_name)
     file_path = person_data["ekg_tests"][0]["data_path"]
     df = pd.read_csv(file_path)
-    return df
+    return df # DataFrame zurückgeben
 
 # Funktion zum Erstellen des interaktiven Plots mit Plotly
 def create_interactive_plot(df):
-    df["time"] = df.index
-    fig = go.Figure()
-    fig.add_trace(go.Scatter(x=df['time'], y=df['PowerOriginal'], name='Leistung (Watt)', yaxis='y1'))
-    fig.add_trace(go.Scatter(x=df['time'], y=df['HeartRate'], name='Herzfrequenz (BPM)', yaxis='y2'))
+    """Erstellt ein interaktives Plotly-Diagramm, das die Leistung und die Herzfrequenz über die Zeit anzeigt und gibt es zurück."""
+    df["time"] = df.index # Zeit als Index setzen
+    fig = go.Figure() # Plot-Objekt erstellen
+    fig.add_trace(go.Scatter(x=df['time'], y=df['PowerOriginal'], name='Leistung (Watt)', yaxis='y1')) # Leistung hinzufügen
+    fig.add_trace(go.Scatter(x=df['time'], y=df['HeartRate'], name='Herzfrequenz (BPM)', yaxis='y2')) # Herzfrequenz hinzufügen
     fig.update_layout(
         title='Leistung und Herzfrequenz über die Zeit',
         xaxis_title='Zeit in s',
@@ -29,6 +32,6 @@ def create_interactive_plot(df):
             yanchor='top',
             bgcolor='rgba(255, 255, 255, 0)',
             bordercolor='rgba(255, 255, 255, 0)'
-        )
+        ) # Layout-Parameter für den Plot
     )
-    return fig
+    return fig # Plot zurückgeben

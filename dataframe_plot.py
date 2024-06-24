@@ -1,7 +1,9 @@
 import pandas as pd
 import plotly.express as px
 
+
 def read_my_csv(file_path):
+    """ Liest eine CSV-Datei ein und gibt sie als Pandas-Dataframe zurück. """
     # Einlesen eines Dataframes
     ## "\t" steht für das Trennzeichen in der txt-Datei (Tabulator anstelle von Beistrich)
     ## header = None: es gibt keine Überschriften in der txt-Datei
@@ -13,10 +15,12 @@ def read_my_csv(file_path):
     # Gibt den geladenen Dataframe zurück
     return df
 
+
 def make_plot(df):
-    # Erstellt einen Line Plot der ersten 2000 Werte mit der Zeit auf der x-Achse
+    """ Erstellt einen Line Plot der ersten 2000 Werte mit der Zeit auf der x-Achse und gibt ihn zurück. """
     fig = px.line(df.head(2000), x="Zeit in ms", y="Messwerte in mV")
     return fig
+
 
 # Dateipfad zur CSV-Datei
 file_path = r'C:\Programmierübungen_II\EKG-App-Entwicklung\data\activity.csv'

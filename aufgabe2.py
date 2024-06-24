@@ -2,9 +2,10 @@ import streamlit as st
 import plotly.graph_objects as go
 import pandas as pd
 
-# Funktion zur Unterteilung der Herzfrequenz in Zonen
+
 def get_heart_rate_zones(df, max_hr):
-    zones = {
+    """Unterteilt die Herzfrequenz in Zonen basierend auf der maximalen Herzfrequenz und gibt das aktualisierte DataFrame zurück."""
+    zones = { # Definition der Herzfrequenzzonen
         'Zone 1': (0.0, 0.6 * max_hr),
         'Zone 2': (0.6 * max_hr, 0.7 * max_hr),
         'Zone 3': (0.7 * max_hr, 0.8 * max_hr),
@@ -12,11 +13,12 @@ def get_heart_rate_zones(df, max_hr):
         'Zone 5': (0.9 * max_hr, max_hr)
     }
     df['Zone'] = pd.cut(df['HeartRate'], bins=[0, 0.6 * max_hr, 0.7 * max_hr, 0.8 * max_hr, 0.9 * max_hr, max_hr],
-                        labels=['Zone 1', 'Zone 2', 'Zone 3', 'Zone 4', 'Zone 5'], right=False)
-    return df, zones
+                        labels=['Zone 1', 'Zone 2', 'Zone 3', 'Zone 4', 'Zone 5'], right=False) # mit pd.cut die Herzfrequenz in die Zonen einteilen
+    return df, zones # Rückgabe des DataFrames und der Zonen
 
-# Funktion zur Erstellung des interaktiven Plots
+
 def create_interactive_plot(df, zones):
+    """Erstellt ein interaktives Plotly-Diagramm, das die Leistung und die Herzfrequenz über die Zeit anzeigt und gibt es zurück."""
     fig = go.Figure()
     df["time"] = df.index
     
@@ -38,7 +40,7 @@ def create_interactive_plot(df, zones):
         line=dict(color='blue')
     ))
 
-    # Farben für die Zonen
+    # Farben für die Zonen festlegen
     colors = ["green", "yellow", "orange", "coral", "purple"]
     
     # Hinzufügen der farbigen Bereiche für die Herzfrequenzzonen
@@ -78,7 +80,8 @@ def create_interactive_plot(df, zones):
         )
     )
     
-    return fig
+    return fig # Rückgabe der Plotly-Figur
+
 
 # Laden der CSV-Datei
 df = pd.read_csv("data/activity.csv")
