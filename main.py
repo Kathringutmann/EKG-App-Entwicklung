@@ -60,7 +60,7 @@ def ekg_analysis_page():
     # Überschrift
     st.title('CardioGraph')
 
-    tab1, tab2, tab3 = st.tabs(["EKG-Daten", "Leistungsdaten", "Herzfrequenzanalyse"])  # Tabs erstellen
+    tab1, tab2, tab3 = st.tabs(["EKG-Daten", "Leistungsdaten", "Herzschlaganalyse"])  # Tabs erstellen
 
     with tab1: # Tab 1 für EKG-Daten
         if current_person: # Wenn eine Person ausgewählt wurde
