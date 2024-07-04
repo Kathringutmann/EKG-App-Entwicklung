@@ -124,6 +124,7 @@ class EKGdata:
         
         return fig
 
+#bis hier werden somit einzelne herzschläge gebaut
 
     def heartbeat_avg(self, resample_length=100):
         """ Berechnet den durchschnittlichen Herzschlag und gibt ihn zurück."""
@@ -161,6 +162,7 @@ class EKGdata:
         
         return self.avg_df
     
+#im dataframe wird der durchschnittliche herzschlag gespeichert
 
     def plot_avg_hb(self):
         #avg_df = self.berechne_durchschnitt_herzschlag()
@@ -170,9 +172,6 @@ class EKGdata:
         fig.update_layout(xaxis_title='Zeit in ms', yaxis_title='Messwerte in mV', template='plotly_white')
         fig.show()
 
-        #df = None
-        #return df
-    
 
     def heartbeat_comparison (self): # die 5 größen abweichungen der herzschläge werden angezeigt und und geplotted .ind 
         """ Vergleicht die Herzschläge und gibt die Abweichungen zurück."""
@@ -193,4 +192,4 @@ if __name__ == "__main__":
     avg_hs = ekg.heartbeat_avg()
     print(avg_hs)
     ekg.plot_avg_hb()
-    
+ 
