@@ -135,53 +135,28 @@ class EKGdata:
         fig.update_layout(xaxis_title='Zeit in ms', yaxis_title='Messwerte in mV', template='plotly_white')
         fig.show()
 
-    def heartbeat_comparison(self, ekg_data, heartbeat_id , threshold=0.1):
+    #def heartbeat_comparison(self, ekg_data, heartbeat_id , threshold=0.1):
+    def warp_heartbeat(heartbeat, reference):
+        """Warpt einen Herzschlag auf die Referenzlänge."""
+        alignment = dtw(heartbeat, reference, keep_internals=True)
+        warped_heartbeat = [heartbeat[idx] for idx in alignment.index1]
+        return warped_heartbeat
 
+    def resample_heartbeat(heartbeat, resample_length):
+        """Resamplet einen Herzschlag auf die gewünschte Länge."""
+        resampled_heartbeat = np.interp(np.linspace(0, len(heartbeat) - 1, resample_length), np.arange(len(heartbeat)), heartbeat)
+        return resampled_heartbeat
+    
+    def calculate_mse(array1, array2):
+        """Berechnet den mittleren quadratischen Fehler (MSE) zwischen zwei Arrays."""
+        mse = np.mean((array1 - array2)**2)
+        return mse
 
-        # Laden des Referenzherzschlags
-        reference_heartbeat = ekg_data.get_peaks_df().loc[heartbeat_id]
+    sorted_mse_values, sorted_indices = zip(*sorted(zip(mse_values, range(len(mse_values)))))
+    
+top_5_indices = sorted_indices[:5]  # Identifiziere die Indizes der Top 5 MSE-Werte
+top_5_deviations = [warped_heartbeats_array[i] - avg_heartbeat for i in top_5_indices]  # Berechne die Abweichungen
 
-# ... (rest of the code remains the same)
-
-
-        # Initialisierung leerer Listen für riskante Herzschläge und durchschnittlichen Herzschlag
-        riskiest_heartbeats = []
-        avg_heartbeat = []
-
-        # Berechnung des Durchschnittsherzschlags
-        for heartbeat_id in range(1, len(ekg_data.get_peaks_df())):
-            heartbeat = ekg_data.get_peaks_df().loc[heartbeat_id]
-            avg_heartbeat.append(heartbeat["Messwerte in mV"].mean())
-
-        avg_heartbeat = pd.Series(avg_heartbeat)
-
-        # Vergleich aller Herzschläge mit dem Referenzherzschlag
-        for heartbeat_id in range(1, len(ekg_data.get_peaks_df())):
-            heartbeat = ekg_data.get_peaks_df().loc[heartbeat_id]
-
-    # ... (rest of the code remains the same)
-
-
-            # Berechnung der Abweichung (MSE)
-            mse = dtw(reference_heartbeat["Messwerte in mV"], heartbeat["Messwerte in mV"])
-
-            # Erstellen des Plots für den Vergleich
-            fig = px.line()
-            fig.add_line(x=reference_heartbeat["Zeit in ms"], y=reference_heartbeat["Messwerte in mV"], name='Referenz')
-            fig.add_line(x=heartbeat["Zeit in ms"], y=heartbeat["Messwerte in mV"], name=f'Herzschlag {heartbeat_id}')
-
-            # Klassifizierung des Herzschlags als risikoreich
-            if mse > threshold:
-                riskiest_heartbeats.append((heartbeat_id, mse, fig))
-
-            # Sortieren der risikoreichen Herzschläge nach Abweichung (absteigend)
-            riskiest_heartbeats.sort(key=lambda x: x[1], reverse=True)
-
-            # Berechnung des durchschnittlichen Herzschlags
-            avg_heartbeat_plot = px.line(x=ekg.get_peaks_df()["Zeit in ms"], y=avg_heartbeat, title='Durchschnittlicher Herzschlag')
-
-            # Rückgabe der Ergebnisse
-            return riskiest_heartbeats, avg_heartbeat, avg_heartbeat_plot
 
 
 
@@ -223,3 +198,5 @@ if __name__ == "__main__":
 
     print("Durchschnittlicher Herzschlag:")
     avg_heartbeat_plot.show()  # Plot des durchschnittlichen Herzschlags anzeigen
+    
+    
