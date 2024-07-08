@@ -24,7 +24,7 @@ def create_interactive_plot(df, zones):
     
     # Hinzufügen der Herzfrequenz zum Plot
     fig.add_trace(go.Scatter(
-        x=df['time']/60,
+        x=df['time'],
         y=df['HeartRate'],
         name='Herzfrequenz (BPM)',
         yaxis='y1',

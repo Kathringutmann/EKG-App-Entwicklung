@@ -1,7 +1,3 @@
-genaues README.md zur Anwendung im Branch Nr. 5 Objektorientierung
-
--pip freeze > requirements.txt
-
 # Ziel der Anwendung
 Die Anwendung ermöglicht die Analyse von EKG-Daten, indem sie dem Benutzer erlaubt, Versuchspersonen auszuwählen und spezifische Ausschnitte ihrer EKG-Daten visuell zu untersuchen.
 Ziel ist es, eine benutzerfreundliche Oberfläche zur Analyse und Visualisierung von EKG-Daten bereitzustellen, um Einblicke in die Herzaktivität der Versuchspersonen zu gewinnen.
@@ -44,7 +40,10 @@ streamlit run main.py
 - scipy
 - plotly
 - json
-- weitere Bibliotheken Kathrin
+- signal
+- dtw
+- numpy
+
 
 ### Dateien
 - main.py: Hauptdatei der Anwendung.
@@ -52,6 +51,11 @@ streamlit run main.py
 - person.py: Modul zur Verwaltung der Personendaten.
 - ekgdata.py: Modul zur Verarbeitung und Visualisierung der EKG-Daten.
 - data/person_db.json: Beispielhafte JSON-Datei mit den Personendaten.
+- activity_analyse.py: Interaktiver Plot zur Leistung über die Zeit.
+- dataframe_plot.py:
+- power_data.py: 
+- requirements.txt:
+- test_5_Schläge.py:  
 
 ## Beispiel
 Hier ist ein Beispiel - Screenshot der Anwendung in Aktion:
@@ -62,21 +66,8 @@ Beispiel Person: Huber, Julian
 ![Screenshot3](screenshot_3.png)
 
 
-
-## Feedback 🗣️
-Falls Sie Probleme beim Installieren oder Verwenden der Anwendung haben oder Verbesserungsvorschläge haben, zögeren Sie nicht, ein Issue im Repository zu öffnen oder eine E-Mail an: ag9716@mci4me.at, ge7045@mci4me.at oder an: gk2575@mci4me.at zu senden.
-
-**_Viel Spaß beim Experimentieren!_** 🦾 💻 📈
-
-
-## WEITERE ERWEITERUNGSMÖGLICHKEITEN
-1. App Lock: Zugriff nur für Ärzte
-2. Herzratenvariabilität in großes schon bereits geplottetes EKG einfügen
-3. Herzratenabweichungen für mögliche Erkrankungserkennungen: siehe "nächster Schritt" 
-
-
-
-## Nächster Schritt: Durchschnitts Herzschlag mit allen anderen Herzschlägen vergleichen und die 5 abweichendsten anzeigen:
+## Gewünschte Erweiterung/gewünschtes Ziel:
+Durchschnitts Herzschlag mit allen anderen Herzschlägen vergleichen und die 5 abweichendsten anzeigen:
 -> nächste schritte in ekg.py bei zeile 163 bei funktion herzschlag_vergleich eintragen:
 
 1. mit dtw alle auf eine länge wieder bringen, da man nur so vergleichen kann Bsp.:
@@ -110,3 +101,9 @@ Falls Sie Probleme beim Installieren oder Verwenden der Anwendung haben oder Ver
         ? : eventuell könnten mehr als 5 Abweichungen gefiltert werden müssen, damit man die 5 Herzschläge mit den größten Abweichungen bekommt
 
         -> diese jeweils einzeln mit plotly ausplotten
+
+
+## Probleme mit der Erweiterung
+
+
+## Endergebnis
