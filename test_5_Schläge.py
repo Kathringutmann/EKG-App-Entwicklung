@@ -134,69 +134,60 @@ class EKGdata:
         fig = px.line(self.avg_df, x='Zeit in ms', y='Durchschnitt Herzschlag', title='Durchschnittlicher Herzschlag')
         fig.update_layout(xaxis_title='Zeit in ms', yaxis_title='Messwerte in mV', template='plotly_white')
         fig.show()
+################################################################################################################################
+    def compare_with_avg(self, num_beats=5):
+        """ Vergleicht die Herzschläge mit dem durchschnittlichen Herzschlag und gibt die größten Abweichungen zurück. """
+        # Resample alle Herzschläge auf die Länge des durchschnittlichen Herzschlags
+        resampled_heartbeats = []
+        for group in self.df['Peak Group'].unique():
+            df_group = self.df[self.df['Peak Group'] == group]
+            heartbeat = df_group['Messwerte in mV'].values
+            resampled_heartbeat = np.interp(np.linspace(0, len(heartbeat) - 1, len(self.avg_df)), np.arange(len(heartbeat)), heartbeat)
+            resampled_heartbeats.append(resampled_heartbeat)
+        
+    # Berechne MSE zwischen jedem resampled Herzschlag und dem durchschnittlichen Herzschlag
+        mse_values = []
+        for idx, heartbeat in enumerate(resampled_heartbeats):
+            mse = np.mean((self.avg_df['Durchschnitt Herzschlag'] - heartbeat) ** 2)
+            mse_values.append((idx + 1, mse))  # (Peak Group Nummer, MSE Wert) speichern
+            
+            # Sortiere nach MSE-Wert absteigend und wähle die Top num_beats Herzschläge
+        mse_values.sort(key=lambda x: x[1], reverse=True)
+        top_beats = mse_values[:num_beats]
+            
+        # Ausgabe der Herzschläge mit den größten Abweichungen
+        for beat_num, mse in top_beats:
+            print(f"Peak Group {beat_num}: MSE = {mse}")
+            self.plot_heartbeat(beat_num)  # Optional: Plot der Herzschläge mit den größten Abweichungen
 
-    #def heartbeat_comparison(self, ekg_data, heartbeat_id , threshold=0.1):
-    def warp_heartbeat(heartbeat, reference):
-        """Warpt einen Herzschlag auf die Referenzlänge."""
-        alignment = dtw(heartbeat, reference, keep_internals=True)
-        warped_heartbeat = [heartbeat[idx] for idx in alignment.index1]
-        return warped_heartbeat
+        return top_beats  # Rückgabe der Top Herzschläge mit den größten Abweichungen
 
-    def resample_heartbeat(heartbeat, resample_length):
-        """Resamplet einen Herzschlag auf die gewünschte Länge."""
-        resampled_heartbeat = np.interp(np.linspace(0, len(heartbeat) - 1, resample_length), np.arange(len(heartbeat)), heartbeat)
-        return resampled_heartbeat
-    
-    def calculate_mse(array1, array2):
-        """Berechnet den mittleren quadratischen Fehler (MSE) zwischen zwei Arrays."""
-        mse = np.mean((array1 - array2)**2)
-        return mse
-
-    sorted_mse_values, sorted_indices = zip(*sorted(zip(mse_values, range(len(mse_values)))))
-    
-top_5_indices = sorted_indices[:5]  # Identifiziere die Indizes der Top 5 MSE-Werte
-top_5_deviations = [warped_heartbeats_array[i] - avg_heartbeat for i in top_5_indices]  # Berechne die Abweichungen
-
-
-
-
-# Testen der Klasse
 if __name__ == "__main__":
+    # Laden der Personendaten
     file = open("data/person_db.json")
     person_data = json.load(file)
-    test_dict = EKGdata.load_by_id(person_data, 2) 
+    
+    # Laden des spezifischen EKG-Tests anhand der ID
+    test_dict = EKGdata.load_by_id(person_data, 2)
     ekg = EKGdata(test_dict)
     
-    # Find peaks and determine heartbeats
+    # Peaks finden und Herzschläge bestimmen
     ekg.find_peaks()
     ekg.heartbeat_determine()
     
-    # Calculate average heartbeat and plot it
+    # Durchschnittlichen Herzschlag berechnen und plotten
     avg_hs = ekg.heartbeat_avg()
     ekg.plot_avg_hb()
     
-    # Importieren Sie die EKGdata-Klasse (falls noch nicht geschehen)
-    from ekgdata import EKGdata
-
-    # Angenommen, Sie haben ein EKGdata-Objekt namens "ekg_data" erstellt
-    ekg = EKGdata(test_dict)
-
-    # Rufen Sie die "heartbeat_comparison"-Funktion auf und speichern Sie die Ergebnisse in Variablen
-    riskiest_heartbeats, avg_heartbeat, avg_heartbeat_plot = ekg.heartbeat_comparison(ekg, heartbeat_id=100, threshold=0.1)
+    # Vergleich der Herzschläge mit dem durchschnittlichen Herzschlag und Ausgabe der Ergebnisse
+    top_beats = ekg.compare_with_avg(num_beats=5)
     
+    # Ausgabe der Herzschläge mit den größten Abweichungen
+    print("Herzschläge mit den größten Abweichungen vom durchschnittlichen Herzschlag:")
+    for beat_num, mse in top_beats:
+        print(f"Peak Group {beat_num}: MSE = {mse}")
+        ekg.plot_heartbeat(beat_num)  # Optional: Plot der Herzschläge mit den größten Abweichungen anzeigen
 
-    # Verarbeiten und visualisieren Sie die Ergebnisse (optional)
-    
-    print("Riskiest heartbeats:")
-    for heartbeat_id, mse, fig in riskiest_heartbeats:
-        print(f"Heartbeat ID: {heartbeat_id}, Deviation: {mse}")
-        fig.show()  # Display the comparison plot
-
-    for heartbeat, mse, fig in riskiest_heartbeats:
-        print(f"Herzschlag-ID: {heartbeat}, Abweichung: {mse}")
-    fig.show()  # Plot des Vergleichs anzeigen
-
-    print("Durchschnittlicher Herzschlag:")
-    avg_heartbeat_plot.show()  # Plot des durchschnittlichen Herzschlags anzeigen
-    
-    
+    # Plot des durchschnittlichen Herzschlags anzeigen
+    avg_hb_fig = ekg.plot_avg_hb()
+    avg_hb_fig.show()
