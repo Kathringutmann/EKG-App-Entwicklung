@@ -186,8 +186,6 @@ if __name__ == "__main__":
     print("Herzschläge mit den größten Abweichungen vom durchschnittlichen Herzschlag:")
     for beat_num, mse in top_beats:
         print(f"Peak Group {beat_num}: MSE = {mse}")
-        ekg.plot_heartbeat(beat_num)  # Optional: Plot der Herzschläge mit den größten Abweichungen anzeigen
+        # ekg.plot_heartbeat(beat_num)  # Optional: Plot der Herzschläge mit den größten Abweichungen anzeigen
 
-    # Plot des durchschnittlichen Herzschlags anzeigen
-    avg_hb_fig = ekg.plot_avg_hb()
-    avg_hb_fig.show()
+    
