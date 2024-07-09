@@ -63,7 +63,7 @@ def ekg_analysis_page():
     tab1, tab2, tab3 = st.tabs(["EKG-Daten", "Leistungsdaten", "Herzschlaganalyse"])  # Tabs erstellen
 
     with tab1: # Tab 1 für EKG-Daten
-        st.write("## gesamter EKG Datensatz")
+        st.write("## Gesamter EKG Datensatz")
         if current_person: # Wenn eine Person ausgewählt wurde
             test_dict = EKGdata.load_by_id(person_data, current_person.id) # EKG-Testdaten für die ausgewählte Person laden
             ekg = EKGdata(test_dict) # EKG-Objekt erstellen
