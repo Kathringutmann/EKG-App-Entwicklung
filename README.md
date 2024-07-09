@@ -2,8 +2,10 @@
 *YOUR HEART, OUR PRIORITY*
 ![Logo1](CardioGraph-Logo.png)
 
+
 ## Einführung
 Willkommen bei CardioGraph! Diese benutzerfreundliche, Streamlit-basierte Webanwendung wurde entwickelt, um Ihnen die Analyse und Visualisierung von EKG-Daten zu erleichtern. CardioGraph ermöglicht Ihnen EKG-Daten zu untersuchen, Herzaktivitäten zu analysieren und wertvolle Einblicke in die Herzgesundheit zu gewinnen.
+
 
 ## Zielgruppe
 Diese Anwendung richtet sich an:
@@ -11,8 +13,8 @@ Diese Anwendung richtet sich an:
 - **Forscher im Bereich Kardiologie:** zur Analyse großer Datensätze und Identifikation von Mustern.
 - **Sportwissenschaftler:** zur Überwachung der Herzaktivität von Athleten und Analyse der Trainingseffekte.
 
-## Funktionen der Anwendung
 
+## Funktionen der Anwendung
 ### Wilkommensseite
 - **Begrüßungstext und Bild:** Eine freundliche Einführung in die Anwendung.
 - **Button "Jetzt Starten"**:
@@ -48,6 +50,7 @@ Diese Anwendung richtet sich an:
 - **Vergleich der Herzschläge mit dem Durchschnitt:**
   Die Herzschläge werden mit dem durchschnittlichen Herzschlag verglichen und die Ergebnisse werden angezeigt.
 
+
 ## Zugang zur Anwendung
 Sie können direkt auf die Webanwendung zugreifen indem Sie die folgende URL besuchen:
 (https://ekg-app-entwicklung-kg-eg-ga.streamlit.app/)
@@ -68,6 +71,7 @@ pip install -r requirements.txt
 ```ruby
 streamlit run main.py
 ```
+
 ## benötigte Bibliotheken
 - pandas
 - streamlit
@@ -91,6 +95,7 @@ streamlit run main.py
 - power_data.py: Modul zur Verarbeitung von Leistungsdaten.
 - requirements.txt: Liste der benötigten Bibliotheken.
 - test_5_Schläge.py: Skript zum Testen der Erkennung von fünf Herschlägen.
+
 
 ## Beispiel
 Hier ist ein Beispiel - Screenshot der Anwendung in Aktion:
@@ -146,7 +151,6 @@ Durchschnitts Herzschlag mit allen anderen Herzschlägen vergleichen und die 5 a
 
 ## Feedback 🗣️ & Kontaktinformationen
 Falls Sie Probleme beim Installieren oder Verwenden der Anwendung haben oder Verbesserungsvorschläge haben, zögeren Sie nicht, ein Issue im Repository zu öffnen oder eine E-Mail an das Entwicklerteam unter : ag9716@mci4me.at, gk2575@mci4me.at oder ge7045@mci4me.at zu senden.
-
 
 
 Wir hoffen, dass CardioGraph Ihnen dabei hilft, tiefere Einblicke in die Herzgesundheit zu gewinnen und eine wertvolle Ressource für Ihre medizinischen, sportlichen oder wissenschaftlichen Analysen darstellt.
