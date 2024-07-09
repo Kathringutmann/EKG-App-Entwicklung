@@ -6,13 +6,20 @@ import ekgdata
 from PIL import Image
 from power_data import load_data_for_plot, create_interactive_plot
 
-
-# Definiere die Hintergrundfarbe für die gesamte App
+# Definiere die Hintergrundfarbe, Schriftfarbe und Schriftart für die gesamte App
 st.markdown(
     """
     <style>
     .stApp {
         background-color: #C6EFFD; /* Light blue background */
+        color: #131E5A; /* Dark blue text color */ 
+        font-family: 'sans-serif';
+    }
+    .stButton > button {
+        background-color: #ECF5FD;
+    }
+    .stSidebar .css-1d391kg {
+        background-color: #ECF5FD; /* Light blue sidebar background */
     }
     </style>
     """,
