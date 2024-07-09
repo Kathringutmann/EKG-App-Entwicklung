@@ -1,6 +1,6 @@
 # CardioGraph 📈
 *YOUR HEART, OUR PRIORITY*
-![Logo1](logo_1.png)
+![Logo1](CardioGraph-Logo.png)
 
 ## Einführung
 Willkommen bei CardioGraph! Diese benutzerfreundliche, Streamlit-basierte Webanwendung wurde entwickelt, um Ihnen die Analyse und Visualisierung von EKG-Daten zu erleichtern. CardioGraph ermöglicht Ihnen EKG-Daten zu untersuchen, Herzaktivitäten zu analysieren und wertvolle Einblicke in die Herzgesundheit zu gewinnen.
@@ -15,7 +15,9 @@ Diese Anwendung richtet sich an:
 
 ### Wilkommensseite
 - **Begrüßungstext und Bild:** Eine freundliche Einführung in die Anwendung.
-- **Button "Jetzt Starten"**: Doppelklicken Sie auf diesen Button, um zur Analyse-Seite zu gelangen.
+- **Button "Jetzt Starten"**:
+  >⚠️[!WICHTIG]
+  >Doppelklicken Sie auf diesen Button, um zur Analyse-Seite zu gelangen.
 
 ### EKG-Analyse-Seite
 #### Sidebar
@@ -48,9 +50,8 @@ Diese Anwendung richtet sich an:
 
 ## Zugang zur Anwendung
 Sie können direkt auf die Webanwendung zugreifen indem Sie die folgende URL besuchen:
-```ruby
-https://ekg-app-entwicklung-kg-eg-ga.streamlit.app/
-```
+(https://ekg-app-entwicklung-kg-eg-ga.streamlit.app/)
+
 
 ## Installation & Nutzung
 1. Klonen Sie das Repository:
