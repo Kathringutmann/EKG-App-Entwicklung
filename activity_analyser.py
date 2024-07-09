@@ -19,14 +19,14 @@ def plot_performance_and_heart_rate(file_path):
     print(df.head())
 
     # Hinzufügen einer Spalte für die Zeit, falls sie nicht bereits vorhanden ist
-    df["time"] = df.index
+    df["Zeit"] = df.index
 
     # Erstellen der Plotly-Figur
     fig = go.Figure()
 
     # Hinzufügen der Leistung zum Plot
     fig.add_trace(go.Scatter(
-        x=df['time'],
+        x=df['Zeit'],
         y=df['PowerOriginal'],
         name='Leistung (Watt)',
         yaxis='y1',
@@ -35,8 +35,8 @@ def plot_performance_and_heart_rate(file_path):
 
     # Hinzufügen der Herzfrequenz zum Plot
     fig.add_trace(go.Scatter(
-        x=df['time'],
-        y=df['HeartRate'],
+        x=df['Zeit'],
+        y=df['Herzfrequenz'],
         name='Herzfrequenz (BPM)',
         yaxis='y2',
         line=dict(color='red')
