@@ -119,7 +119,7 @@ def ekg_analysis_page():
             st.plotly_chart(fig)
 
     with tab3:  # Tab 3 für Erweiterung der Herzfrequenzanalyse
-        st.write("## Herzfrequenzanalyse")
+        st.write("## Herzschlaganalyse")
 
         # Berechnen und Plotten des durchschnittlichen Herzschlags
         ekg.heartbeat_determine()  # Herzschläge bestimmen und Peak Group hinzufügen
