@@ -52,10 +52,10 @@ streamlit run main.py
 - ekgdata.py: Modul zur Verarbeitung und Visualisierung der EKG-Daten.
 - data/person_db.json: Beispielhafte JSON-Datei mit den Personendaten.
 - activity_analyse.py: Interaktiver Plot zur Leistung über die Zeit.
-- dataframe_plot.py:
-- power_data.py: 
-- requirements.txt:
-- test_5_Schläge.py:  
+- dataframe_plot.py: Modul zur Erstellung von Plots aus DataFrames.
+- power_data.py: Modul zur Verarbeitung von Leistungsdaten.
+- requirements.txt: Liste der benötigten Bibliotheken.
+- test_5_Schläge.py: Skript zum Testen der Erkennung von fünf Herschlägen.
 
 ## Beispiel
 Hier ist ein Beispiel - Screenshot der Anwendung in Aktion:
