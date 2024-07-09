@@ -63,6 +63,7 @@ def ekg_analysis_page():
     tab1, tab2, tab3 = st.tabs(["EKG-Daten", "Leistungsdaten", "Herzschlaganalyse"])  # Tabs erstellen
 
     with tab1: # Tab 1 für EKG-Daten
+        st.write("## gesamter EKG Datensatz")
         if current_person: # Wenn eine Person ausgewählt wurde
             test_dict = EKGdata.load_by_id(person_data, current_person.id) # EKG-Testdaten für die ausgewählte Person laden
             ekg = EKGdata(test_dict) # EKG-Objekt erstellen
@@ -79,6 +80,7 @@ def ekg_analysis_page():
         # Gesamtgröße des EKG-Datensatzes in ms (angenommen 600000 ms)
         total_size_ms = 600000
 
+        st.write("## Benutzerdefinierte Betrachtung einzelner EKG Ausschnitte")
         # Slider zur Einstellung der Größe des ausgewählten Bereichs in ms
         range_size = st.slider("Ausschnittsgröße (ms)", 0, total_size_ms, 5000, key="range_size")
 
