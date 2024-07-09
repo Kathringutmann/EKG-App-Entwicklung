@@ -120,7 +120,22 @@ def ekg_analysis_page():
 
     with tab3:  # Tab 3 für Erweiterung der Herzfrequenzanalyse
         st.write("## Herzfrequenzanalyse")
-        st.write("Erweiterung hinzufügen!!!")
+
+        # Berechnen und Plotten des durchschnittlichen Herzschlags
+        ekg.heartbeat_determine()  # Herzschläge bestimmen und Peak Group hinzufügen
+        avg_hs = ekg.heartbeat_avg()
+        avg_fig = ekg.plot_avg_hb()
+        st.plotly_chart(avg_fig)
+
+        # Vergleich der Herzschläge mit dem durchschnittlichen Herzschlag und Ausgabe der Ergebnisse
+        top_beats = ekg.compare_with_avg(num_beats=5)
+
+        # Ausgabe der Herzschläge mit den größten Abweichungen
+        st.write("Herzschläge mit den größten Abweichungen vom durchschnittlichen Herzschlag:")
+        for beat_num, mse in top_beats:
+            st.write(f"Peak Group {beat_num}: MSE = {mse}")
+            heartbeat_fig = ekg.plot_heartbeat(beat_num)
+            st.plotly_chart(heartbeat_fig)
 
 
 # Initialisiere den Session State für die Seitenwahl
