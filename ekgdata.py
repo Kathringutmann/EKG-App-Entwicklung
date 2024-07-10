@@ -41,10 +41,8 @@ class EKGdata:
    
 
     def get_peaks_df(self):
-        """Gibt einen neuen DataFrame zurück, der nur die Peaks enthält."""
-        peaks_df = self.df.iloc[self.peaks[0]]  # Peaks aus dem DataFrame extrahieren
-        peaks_df['ID'] = range(1, len(peaks_df) + 1)  # Spalte mit IDs hinzufügen
-        return peaks_df  # DataFrame mit Peaks und IDs zurückgeben
+        """ Gibt einen neuen DataFrame zurück, der nur die Peaks enthält."""
+        return self.df.iloc[self.peaks[0]] # DataFrame mit den Peaks zurückgeben
 
 
     #Methode für Plot erstellen
@@ -82,8 +80,8 @@ class EKGdata:
     def make_plot_hr(self):
         """ Erstellt einen interaktiven Plot der Herzfrequenz und gibt ihn zurück."""
         peaks_df = self.get_peaks_df().iloc[1:] #ersten Wert entfernen, da er nicht relevant ist
-        self.fig_hr = px.line(x=self.get_peaks_df()["Zeit in ms"], y=self.hr, title='Heart Rate Over Time', labels={'x': 'Time (ms)', 'y': 'Heart Rate (bpm)'}) #Plot erstellen
-        return self.fig_hr
+        self.fig_hr = px.line(x=self.get_peaks_df()["Zeit in ms"], y=self.hr, title='Herzfrequenz über die Zeit', labels={'x': 'Zeit (ms)', 'y': 'Herzfrequenz (bpm)'}) 
+        #return self.fig_hr
 
 
     #Erweiterung: Herzschlaganalyse
@@ -91,8 +89,12 @@ class EKGdata:
         """ Berechnet die Abweichungen zwischen zwei Herzschlägen und gibt sie zurück."""
         
         df_beat1 = self.df[self.df["Beat"]==1] # DataFrame für den ersten Herzschlag
+        df_beat2 = self.df[self.df["Beat"]==2] # DataFrame für den zweiten Herzschlag
+
+        # Abweichungen berechnen
+        deviation = np.sqrt(np.mean((df_beat1["Messwerte in mV"] - df_beat2["Messwerte in mV"])**2))
         
-        return 1.1 #float
+        return deviation # Abweichungen zurückgeben
     
 
     def heartbeat_determine(self): #fügt df durchnummerierten Herzschläge hinzu
@@ -114,7 +116,7 @@ class EKGdata:
         print(self.df)
 
         
-    def plot_heartbeat(self, number):
+    def plot_heartbeat(self, number): 
         """ Plottet den Herzschlag mit der angegebenen Nummer und gibt ihn zurück."""
         # Filtern des DataFrames für den gewünschten Herzschlag
         df_filtered = self.df[self.df['Peak Group'] == number]
@@ -122,10 +124,10 @@ class EKGdata:
         # Plotten des Herzschlags mit Plotly
         fig = px.line(df_filtered, x='Zeit in ms', y='Messwerte in mV', title=f'Herzschlag Nummer {number}', markers=True)
         fig.update_layout(xaxis_title='Zeit in ms', yaxis_title='Messwerte in mV', template='plotly_white')
+        fig.show()
         
         return fig
 
-#bis hier werden somit einzelne herzschläge gebaut
 
     def heartbeat_avg(self, resample_length=100):
         """ Berechnet den durchschnittlichen Herzschlag und gibt ihn zurück."""
@@ -161,72 +163,39 @@ class EKGdata:
             'Durchschnitt Herzschlag': avg_heartbeat
         })
         
-        return self.avg_df
+        return self.avg_df # Durchschnittlicher Herzschlag zurückgeben
     
-#im dataframe wird der durchschnittliche herzschlag gespeichert
 
     def plot_avg_hb(self):
+        #avg_df = self.berechne_durchschnitt_herzschlag()
         """ Plottet den durchschnittlichen Herzschlag und gibt ihn zurück."""
-        # Annahme: self.avg_df enthält die durchschnittlichen Herzschlagdaten
+        # Plotten des durchschnittlichen Herzschlags mit Plotly
         fig = px.line(self.avg_df, x='Zeit in ms', y='Durchschnitt Herzschlag', title='Durchschnittlicher Herzschlag')
         fig.update_layout(xaxis_title='Zeit in ms', yaxis_title='Messwerte in mV', template='plotly_white')
-        
-        return fig
+        fig.show()
 
-##########################################################################################################################################################################################################################################################################
-    def compare_with_avg(self, num_beats=5):
-        """ Vergleicht die Herzschläge mit dem durchschnittlichen Herzschlag und gibt die größten Abweichungen zurück. """
-        # Resample alle Herzschläge auf die Länge des durchschnittlichen Herzschlags
-        resampled_heartbeats = []
-        for group in self.df['Peak Group'].unique():
-            df_group = self.df[self.df['Peak Group'] == group]
-            heartbeat = df_group['Messwerte in mV'].values
-            resampled_heartbeat = np.interp(np.linspace(0, len(heartbeat) - 1, len(self.avg_df)), np.arange(len(heartbeat)), heartbeat)
-            resampled_heartbeats.append(resampled_heartbeat)
-        
-    # Berechne MSE zwischen jedem resampled Herzschlag und dem durchschnittlichen Herzschlag
-        mse_values = []
-        for idx, heartbeat in enumerate(resampled_heartbeats):
-            mse = np.mean((self.avg_df['Durchschnitt Herzschlag'] - heartbeat) ** 2)
-            mse_values.append((idx + 1, mse))  # (Peak Group Nummer, MSE Wert) speichern
-            
-            # Sortiere nach MSE-Wert absteigend und wähle die Top num_beats Herzschläge
-        mse_values.sort(key=lambda x: x[1], reverse=True)
-        top_beats = mse_values[:num_beats]
-            
-        # Ausgabe der Herzschläge mit den größten Abweichungen
-        for beat_num, mse in top_beats:
-            print(f"Peak Group {beat_num}: MSE = {mse}")
-            self.plot_heartbeat(beat_num)  # Optional: Plot der Herzschläge mit den größten Abweichungen
+        #df = None
+        #return df
+    
 
-        return top_beats  # Rückgabe der Top Herzschläge mit den größten Abweichungen
-
+    def heartbeat_comparison(self): # die 5 größen abweichungen der herzschläge werden angezeigt und und geplotted .ind 
+        """ Vergleicht die Herzschläge und gibt die Abweichungen zurück."""
+        list = [] # für jeden einzelnen herzschlag alle datenpunkte vergleichen ---mit dtw  und dann resampel, damit alle die selbe länge haben.-- dann in der formel mean square error MSE in arrays..2 mit gleicher länge Formel:(array 1 - array2)**2) =MSE
+        return list
     
     
+    
+# Testen der Klasse
 if __name__ == "__main__":
-    # Laden der Personendaten
     file = open("data/person_db.json")
     person_data = json.load(file)
-    
-    # Laden des spezifischen EKG-Tests anhand der ID
-    test_dict = EKGdata.load_by_id(person_data, 2)
+    test_dict = EKGdata.load_by_id(person_data,2) 
     ekg = EKGdata(test_dict)
-    
-    # Peaks finden und Herzschläge bestimmen
     ekg.find_peaks()
     ekg.heartbeat_determine()
-    
-    # Durchschnittlichen Herzschlag berechnen und plotten
+    print(ekg.df)
+    #ekg.plot_herzschlag(2) #in app noch anzeigen, und eingabefeld für testnummer hinzufügen
     avg_hs = ekg.heartbeat_avg()
+    print(avg_hs)
     ekg.plot_avg_hb()
-    
-    # Vergleich der Herzschläge mit dem durchschnittlichen Herzschlag und Ausgabe der Ergebnisse
-    top_beats = ekg.compare_with_avg(num_beats=5)
-    
-    # Ausgabe der Herzschläge mit den größten Abweichungen
-    print("Herzschläge mit den größten Abweichungen vom durchschnittlichen Herzschlag:")
-    for beat_num, mse in top_beats:
-        print(f"Peak Group {beat_num}: MSE = {mse}")
-        # ekg.plot_heartbeat(beat_num)  # Optional: Plot der Herzschläge mit den größten Abweichungen anzeigen
-
     
