@@ -107,35 +107,26 @@ Beispiel Person: Huber, Julian
 ![Screenshot3](screenshot_3.png)
 
 
-## Beschreibung der Erweiterung:
-*heartbeat_deviation(beat1, beat2)*
+## Beschreibung und Anwendung der Erweiterung
+Mit der Erweiterung kann eine detaillierte Analyse der Herzschläge durchgeführt werden. Zuerst wird der durchschnittliche Herzschlag des Tests gefunden und dann die jeweils 5 am meisten abweichendsten Herzschläge, welche in einem Plot dargestellt werden.
+
+- *heartbeat_deviation(beat1, beat2)*:
 Diese Methode berechnet die Abweichungen zwischen zwei Herzschlägen basierend auf den Messwerten in Millivolt (Messwerte in mV). Sie filtert zunächst die Daten für den ersten und den zweiten Herzschlag und gibt einen DataFrame zurück, der nur die Daten des ersten Herzschlags enthält.
 
-*heartbeat_determine()*
+- *heartbeat_determine()*:
 Diese Methode fügt dem vorhandenen DataFrame self.df eine Spalte Beat hinzu, die jeden Herzschlag mit einer eindeutigen Nummer markiert (Peak Group). Sie iteriert über die Daten und weist jeder Zeile basierend auf den Peaks eine entsprechende Gruppennummer zu.
 
-*plot_heartbeat(number)*
+- *plot_heartbeat(number)*:
 Diese Methode plottet den Herzschlag mit der angegebenen Gruppennummer number. Sie filtert den DataFrame self.df nach der entsprechenden Peak Group, um die Daten zu extrahieren, und erstellt dann einen interaktiven Liniengraphen mit Plotly, der die Herzschlagdaten über die Zeit (Zeit in ms) darstellt.
 
-### Durchschnittlicher Herzschlag
-*heartbeat_avg(resample_length=100)*
+-*heartbeat_avg(resample_length=100)*:
 Diese Methode berechnet den durchschnittlichen Herzschlag aus den vorhandenen Herzschlägen. Zuerst werden alle Herzschläge in einer Liste extrahiert und auf die Länge des Referenzherzschlags resampled. Dann wird der durchschnittliche Herzschlag berechnet und in einem neuen DataFrame self.avg_df gespeichert.
 
-*plot_avg_hb()*
+- *plot_avg_hb()*:
 Diese Methode plottet den durchschnittlichen Herzschlag aus self.avg_df. Sie erstellt einen interaktiven Liniengraphen mit Plotly, der den durchschnittlichen Herzschlag über die Zeit darstellt.
 
-Vergleich mit dem durchschnittlichen Herzschlag
-compare_with_avg(num_beats=5)
+- *compare_with_avg(num_beats=5)*:
 Diese Methode vergleicht die vorhandenen Herzschläge mit dem durchschnittlichen Herzschlag. Zuerst werden alle Herzschläge auf die Länge des durchschnittlichen Herzschlags resampled. Dann wird der mittlere quadratische Fehler (MSE) zwischen jedem resampled Herzschlag und dem durchschnittlichen Herzschlag berechnet. Die Herzschläge werden nach dem MSE-Wert absteigend sortiert, und die Top num_beats Herzschläge mit den größten Abweichungen werden zurückgegeben.
-
-## Anwendung der Erweiterung
-Mit der Erweiterung kannst eine detaillierte Analyse der Herzschläge durchführen und dabei verschiedene Plots zu abweichenden Herzschläge  ansehen.
-
-Durchschnittlichen Herzschlag berechnet und geplottet:
-avg_hs = ekg.heartbeat_avg()
-ekg.plot_avg_hb()
-Vergleich mit dem durchschnittlichen Herzschlag: Vergleiche die Herzschläge mit dem durchschnittlichen Herzschlag und gib die Herzschläge mit den größten Abweichungen aus.
-
 
 
 ## Feedback 🗣️ & Kontaktinformationen
