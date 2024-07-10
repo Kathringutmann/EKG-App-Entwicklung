@@ -119,7 +119,7 @@ Diese Methode fügt dem vorhandenen DataFrame self.df eine Spalte Beat hinzu, di
 - *plot_heartbeat(number)*:
 Diese Methode plottet den Herzschlag mit der angegebenen Gruppennummer number. Sie filtert den DataFrame self.df nach der entsprechenden Peak Group, um die Daten zu extrahieren, und erstellt dann einen interaktiven Liniengraphen mit Plotly, der die Herzschlagdaten über die Zeit (Zeit in ms) darstellt.
 
--*heartbeat_avg(resample_length=100)*:
+- *heartbeat_avg(resample_length=100)*:
 Diese Methode berechnet den durchschnittlichen Herzschlag aus den vorhandenen Herzschlägen. Zuerst werden alle Herzschläge in einer Liste extrahiert und auf die Länge des Referenzherzschlags resampled. Dann wird der durchschnittliche Herzschlag berechnet und in einem neuen DataFrame self.avg_df gespeichert.
 
 - *plot_avg_hb()*:
