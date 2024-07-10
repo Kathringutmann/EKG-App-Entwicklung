@@ -18,7 +18,7 @@ Diese Anwendung richtet sich an:
 ### Wilkommensseite
 - **Begrüßungstext und Bild:** Eine freundliche Einführung in die Anwendung.
 - **Button "Jetzt Starten"**:
-  >⚠️[!WICHTIG]
+  >⚠️**WICHTIG:**
   >Doppelklicken Sie auf diesen Button, um zur Analyse-Seite zu gelangen.
 
 ### EKG-Analyse-Seite
@@ -62,14 +62,12 @@ Sie können direkt auf die Webanwendung zugreifen indem Sie die folgende URL bes
 git clone https://github.com/IhrBenutzername/ekg-analyse-app.git
 ```
 
-2. ???
-
-3. mit folgendem Befehl können Sie die benötigten Bibliotheken installieren:
+2. mit folgendem Befehl können Sie die benötigten Bibliotheken installieren:
 ```ruby
 pip install -r requirements.txt
 ```
 
-4. Starten Sie die App mit folgendem Befehl:
+3. Starten Sie die App mit folgendem Befehl:
 ```ruby
 streamlit run main.py
 ```
