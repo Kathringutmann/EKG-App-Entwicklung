@@ -131,7 +131,7 @@ class EKGdata:
         
         return fig
 
-#bis hier werden somit einzelne herzschläge gebaut
+    #bis hier werden einzelne Herzschläge gebaut
 
     def heartbeat_avg(self, resample_length=100):
         """ Berechnet den durchschnittlichen Herzschlag und gibt ihn zurück."""
@@ -147,7 +147,7 @@ class EKGdata:
         # Warpe alle Herzschläge zur Referenz und berechne den Durchschnitt
         aligned_heartbeats = []
         
-        for heartbeat in heartbeats:
+        for heartbeat in heartbeats: 
             alignment = dtw(heartbeat, reference, keep_internals=True)
             aligned_heartbeat = [heartbeat[idx] for idx in alignment.index1]
             aligned_heartbeats.append(aligned_heartbeat)
@@ -179,7 +179,10 @@ class EKGdata:
         
         return fig
 
-##########################################################################################################################################################################################################################################################################
+#bis hier wird der durchschnittliche herzschlag berechnet und geplottet
+
+#nun wird der durchschnittliche herzschlag mit den anderen herzschlägen verglichen
+
     def compare_with_avg(self, num_beats=5):
         """ Vergleicht die Herzschläge mit dem durchschnittlichen Herzschlag und gibt die größten Abweichungen zurück. """
         # Resample alle Herzschläge auf die Länge des durchschnittlichen Herzschlags
@@ -190,15 +193,15 @@ class EKGdata:
             resampled_heartbeat = np.interp(np.linspace(0, len(heartbeat) - 1, len(self.avg_df)), np.arange(len(heartbeat)), heartbeat)
             resampled_heartbeats.append(resampled_heartbeat)
         
-    # Berechne MSE zwischen jedem resampled Herzschlag und dem durchschnittlichen Herzschlag
-        mse_values = []
-        for idx, heartbeat in enumerate(resampled_heartbeats):
-            mse = np.mean((self.avg_df['Durchschnitt Herzschlag'] - heartbeat) ** 2)
+        # Berechne MSE zwischen jedem resampled Herzschlag und dem durchschnittlichen Herzschlag
+        mse_values = [] # Liste für die MSE-Werte
+        for idx, heartbeat in enumerate(resampled_heartbeats): # Iteriere über alle Herzschläge
+            mse = np.mean((self.avg_df['Durchschnitt Herzschlag'] - heartbeat) ** 2) # Berechne MSE
             mse_values.append((idx + 1, mse))  # (Peak Group Nummer, MSE Wert) speichern
             
-            # Sortiere nach MSE-Wert absteigend und wähle die Top num_beats Herzschläge
-        mse_values.sort(key=lambda x: x[1], reverse=True)
-        top_beats = mse_values[:num_beats]
+        # Sortiere nach MSE-Wert absteigend und wähle die Top num_beats Herzschläge
+        mse_values.sort(key=lambda x: x[1], reverse=True) 
+        top_beats = mse_values[:num_beats] 
             
         # Ausgabe der Herzschläge mit den größten Abweichungen
         for beat_num, mse in top_beats:
