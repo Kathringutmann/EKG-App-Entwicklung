@@ -62,6 +62,8 @@ Sie können direkt auf die Webanwendung zugreifen indem Sie die folgende URL bes
 git clone https://github.com/IhrBenutzername/ekg-analyse-app.git
 ```
 
+2. ???
+
 3. mit folgendem Befehl können Sie die benötigten Bibliotheken installieren:
 ```ruby
 pip install -r requirements.txt
@@ -88,13 +90,12 @@ streamlit run main.py
 - main.py: Hauptdatei der Anwendung.
 - read_data.py: Skript zum Einlesen der Personendaten.
 - person.py: Modul zur Verwaltung der Personendaten.
-- ekgdata.py: Modul zur Verarbeitung und Visualisierung der EKG-Daten.
+- ekgdata.py: Modul zur Verarbeitung und Visualisierung der EKG-Daten und der Herzschlaganalyse .
 - data/person_db.json: Beispielhafte JSON-Datei mit den Personendaten.
 - activity_analyse.py: Interaktiver Plot zur Leistung über die Zeit.
 - dataframe_plot.py: Modul zur Erstellung von Plots aus DataFrames.
 - power_data.py: Modul zur Verarbeitung von Leistungsdaten.
 - requirements.txt: Liste der benötigten Bibliotheken.
-- test_5_Schläge.py: Skript zum Testen der Erkennung von fünf Herschlägen.
 
 
 ## Beispiel
@@ -106,47 +107,35 @@ Beispiel Person: Huber, Julian
 ![Screenshot3](screenshot_3.png)
 
 
-## Gewünschte Erweiterung/gewünschtes Ziel:
-Durchschnitts Herzschlag mit allen anderen Herzschlägen vergleichen und die 5 abweichendsten anzeigen:
--> nächste schritte in ekg.py bei zeile 163 bei funktion herzschlag_vergleich eintragen:
+## Beschreibung der Erweiterung:
+*heartbeat_deviation(beat1, beat2)*
+Diese Methode berechnet die Abweichungen zwischen zwei Herzschlägen basierend auf den Messwerten in Millivolt (Messwerte in mV). Sie filtert zunächst die Daten für den ersten und den zweiten Herzschlag und gibt einen DataFrame zurück, der nur die Daten des ersten Herzschlags enthält.
 
-1. mit dtw alle auf eine länge wieder bringen, da man nur so vergleichen kann Bsp.:
-        Verwende den ersten Herzschlag als Referenz
-        referenz = herzschlaege[0]
-        
-        # Warpe alle Herzschläge zur Referenz und speichere die gewarpten Herzschläge
-        aligned_herzschlaege = []
-        
-        for herzschlag in herzschlaege:
-            alignment = dtw(herzschlag, referenz, keep_internals=True, dist_method=dist_metric)
-            aligned_herzschlag = [herzschlag[idx] for idx in alignment.index1]
-            aligned_herzschlaege.append(aligned_herzschlag)
-        
-2. und dann resampel Bsp.:
-        # Resample the aligned heartbeats to a common length
-        resampled_herzschlaege = []
-        for herzschlag in aligned_herzschlaege:
-            resampled_herzschlag = np.interp(np.linspace(0, len(herzschlag) - 1, resample_length), np.arange(len(herzschlag)), herzschlag)
-            resampled_herzschlaege.append(resampled_herzschlag)
-        
-        # Berechne den Durchschnitt über alle resampled Herzschläge hinweg
-        avg_herzschlag = np.mean(resampled_herzschlaege, axis=0)
+*heartbeat_determine()*
+Diese Methode fügt dem vorhandenen DataFrame self.df eine Spalte Beat hinzu, die jeden Herzschlag mit einer eindeutigen Nummer markiert (Peak Group). Sie iteriert über die Daten und weist jeder Zeile basierend auf den Peaks eine entsprechende Gruppennummer zu.
 
-3. dann in der formel mean square error MSE in arrays
-        (2 arrays mit gleicher länge!)
-        Formel:(array 1 - array2)**2 = MSE
+*plot_heartbeat(number)*
+Diese Methode plottet den Herzschlag mit der angegebenen Gruppennummer number. Sie filtert den DataFrame self.df nach der entsprechenden Peak Group, um die Daten zu extrahieren, und erstellt dann einen interaktiven Liniengraphen mit Plotly, der die Herzschlagdaten über die Zeit (Zeit in ms) darstellt.
 
-4. durch Formel hat man einen Array? ------ NACHFRAGEN!!!!
-        -> aus diesen einzelnen Datenpunkten-differenzen, können dann die 5 größten Abweichungen gefiltert werden
-        ? : eventuell könnten mehr als 5 Abweichungen gefiltert werden müssen, damit man die 5 Herzschläge mit den größten Abweichungen bekommt
+### Durchschnittlicher Herzschlag
+*heartbeat_avg(resample_length=100)*
+Diese Methode berechnet den durchschnittlichen Herzschlag aus den vorhandenen Herzschlägen. Zuerst werden alle Herzschläge in einer Liste extrahiert und auf die Länge des Referenzherzschlags resampled. Dann wird der durchschnittliche Herzschlag berechnet und in einem neuen DataFrame self.avg_df gespeichert.
 
-        -> diese jeweils einzeln mit plotly ausplotten
+*plot_avg_hb()*
+Diese Methode plottet den durchschnittlichen Herzschlag aus self.avg_df. Sie erstellt einen interaktiven Liniengraphen mit Plotly, der den durchschnittlichen Herzschlag über die Zeit darstellt.
 
+Vergleich mit dem durchschnittlichen Herzschlag
+compare_with_avg(num_beats=5)
+Diese Methode vergleicht die vorhandenen Herzschläge mit dem durchschnittlichen Herzschlag. Zuerst werden alle Herzschläge auf die Länge des durchschnittlichen Herzschlags resampled. Dann wird der mittlere quadratische Fehler (MSE) zwischen jedem resampled Herzschlag und dem durchschnittlichen Herzschlag berechnet. Die Herzschläge werden nach dem MSE-Wert absteigend sortiert, und die Top num_beats Herzschläge mit den größten Abweichungen werden zurückgegeben.
 
-## Probleme mit der Erweiterung
+## Anwendung der Erweiterung
+Mit der Erweiterung kannst eine detaillierte Analyse der Herzschläge durchführen und dabei verschiedene Plots zu abweichenden Herzschläge  ansehen.
 
+Durchschnittlichen Herzschlag berechnet und geplottet:
+avg_hs = ekg.heartbeat_avg()
+ekg.plot_avg_hb()
+Vergleich mit dem durchschnittlichen Herzschlag: Vergleiche die Herzschläge mit dem durchschnittlichen Herzschlag und gib die Herzschläge mit den größten Abweichungen aus.
 
-## Endergebnis
 
 
 ## Feedback 🗣️ & Kontaktinformationen
