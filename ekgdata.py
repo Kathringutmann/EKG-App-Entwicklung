@@ -95,8 +95,10 @@ class EKGdata:
         """ Berechnet die Abweichungen zwischen zwei Herzschlägen und gibt sie zurück."""
         
         df_beat1 = self.df[self.df["Beat"]==1] # DataFrame für den ersten Herzschlag
+        df_beat2 = self.df[self.df["Beat"]==2] # DataFrame für den zweiten Herzschlag
         
-        return 1.1 #float
+        return df_beat1 # Rückgabe des DataFrames für den ersten Herzschlag
+
     
 
     def heartbeat_determine(self): #fügt df durchnummerierten Herzschläge hinzu
